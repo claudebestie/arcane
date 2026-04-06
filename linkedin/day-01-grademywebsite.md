@@ -1,22 +1,18 @@
-I built a website grader last night.
+Ever wondered how your website actually performs?
 
-You paste a URL. 3 seconds later you get:
+At Arcane Studio, we build websites and digital products for brands like Ryvdoll, startups in fintech, and health tech companies. And one thing we noticed — most clients come to us without knowing where their current site stands.
 
-→ A score out of 100
-→ Performance, SEO, accessibility, best practices
-→ Each category graded A to F
-→ Actionable findings (not vague advice)
+So I made a little tool this weekend. You paste your URL, and it gives you an honest report in a few seconds.
 
-No signup. No email. No "book a call to see your results."
+Performance, SEO, accessibility, best practices — each scored and graded from A to F. With real tips on what to fix and why it matters.
 
-Just paste and know.
+Nothing to install, no account needed. Just curiosity.
 
-I'm starting a challenge: 30 tools in 30 days. All free. All live.
+I decided to challenge myself: build and ship one free tool every day for 30 days. This is Day 1.
 
-This is Day 1.
+Would love for you to try it and tell me what you think:
+grademywebsite.arcane-studio.com
 
-Try yours: grademywebsite.arcane-studio.com
+If you're curious about your score, drop your URL below — happy to take a look together.
 
-Drop your URL in the comments — I'll tell you what I think.
-
-#BuildInPublic #WebDev #SEO #ArcaneStudio
+#BuildInPublic #WebDev #ArcaneStudio
