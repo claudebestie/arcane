@@ -369,7 +369,7 @@
 
     analyzeBtn.addEventListener('click', async () => {
       const text = ideaInput.value.trim();
-      if (!text || text.length < 20) { ideaInput.style.borderColor = 'var(--red)'; setTimeout(() => ideaInput.style.borderColor = '', 2000); return; }
+      if (!text || text.length < 5) { ideaInput.style.borderColor = 'var(--red)'; ideaInput.placeholder = 'Type your idea here — even a short sentence works!'; setTimeout(() => { ideaInput.style.borderColor = ''; ideaInput.placeholder = 'Describe your idea in a few sentences...'; }, 2500); return; }
 
       hero.style.display = 'none';
       results.style.display = 'none';
