@@ -300,111 +300,8 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // ── SCORING ENGINE — content-aware, varied results ──
-    const CRITERIA = [
-      { name: 'Standalone value', desc: 'Solves a problem on its own?', weight: 2, boost: ['platform','system','replace','all-in-one','end-to-end'], penalty: ['add-on','plugin','extension','integration','widget'] },
-      { name: 'Willingness to pay', desc: 'Would people pay for this?', weight: 2, boost: ['save','revenue','money','roi','profit','business','enterprise'], penalty: ['free','fun','social','meme','joke'] },
-      { name: 'Market size', desc: 'Large enough audience?', weight: 1.5, boost: ['everyone','global','million','business','company','team','enterprise'], penalty: ['niche','specific','local','personal','myself'] },
-      { name: 'Defensibility', desc: 'Network effects, data moat?', weight: 1.5, boost: ['network','community','data','marketplace','platform','ai','machine learning'], penalty: ['simple','basic','copy','clone','wrapper'] },
-      { name: 'Differentiation', desc: 'Does something new?', weight: 1, boost: ['first','new','novel','unique','unlike','never','revolutionary'], penalty: ['like','similar','better','clone','alternative'] },
-      { name: 'Technical depth', desc: 'More than a weekend project?', weight: 1, boost: ['ai','machine learning','algorithm','real-time','blockchain','infrastructure','api'], penalty: ['spreadsheet','form','list','directory','landing'] },
-      { name: 'Retention', desc: 'Users come back weekly?', weight: 1, boost: ['daily','weekly','subscribe','notify','track','monitor','dashboard','feed'], penalty: ['once','one-time','generate','calculate','convert'] },
-      { name: 'Revenue clarity', desc: 'Obvious way to monetize?', weight: 1, boost: ['subscription','saas','premium','enterprise','per-seat','monthly','marketplace','commission'], penalty: ['free','open-source','hobby','nonprofit'] }
-    ];
-
-    const SIMILAR_DB = [
-      { keywords: ['meeting','transcri','notes','action item'], products: ['Otter.ai','Fireflies.ai','Grain','tl;dv'], cat: 'Meeting tools' },
-      { keywords: ['invoice','freelanc','payment','billing','accounting'], products: ['FreshBooks','Wave','Bonsai','And.co'], cat: 'Invoicing' },
-      { keywords: ['neighbor','local','community','hyperlocal'], products: ['Nextdoor','Facebook Groups','Citizen','Patch'], cat: 'Local networks' },
-      { keywords: ['crypto','portfolio','wallet','exchange','defi','token'], products: ['CoinGecko','Delta','Zerion','CoinTracker'], cat: 'Crypto' },
-      { keywords: ['review','restaurant','reputation','feedback'], products: ['Birdeye','Podium','ReviewTrackers','Trustpilot'], cat: 'Reviews' },
-      { keywords: ['email','marketing','newsletter','campaign','outreach'], products: ['Mailchimp','Brevo','ConvertKit','Beehiiv'], cat: 'Email' },
-      { keywords: ['project','manage','task','team','kanban','sprint'], products: ['Notion','Asana','Linear','Monday.com'], cat: 'PM tools' },
-      { keywords: ['social media','schedule','post','content','creator'], products: ['Buffer','Hootsuite','Later','Typefully'], cat: 'Social tools' },
-      { keywords: ['analytics','dashboard','metrics','tracking','event'], products: ['Mixpanel','Amplitude','PostHog','Plausible'], cat: 'Analytics' },
-      { keywords: ['ecommerce','store','shop','sell','product','merch'], products: ['Shopify','Gumroad','Lemonsqueezy','WooCommerce'], cat: 'E-commerce' },
-      { keywords: ['design','figma','ui','prototype','wireframe'], products: ['Figma','Canva','Framer','Webflow'], cat: 'Design' },
-      { keywords: ['hiring','recruit','job','talent','resume','hr'], products: ['Greenhouse','Lever','Workable','LinkedIn Jobs'], cat: 'HR/Recruiting' },
-      { keywords: ['chatbot','support','customer','helpdesk','ticket'], products: ['Intercom','Zendesk','Freshdesk','Crisp'], cat: 'Support' },
-      { keywords: ['crm','sales','lead','pipeline','deal','prospect'], products: ['HubSpot','Salesforce','Pipedrive','Close'], cat: 'CRM' },
-      { keywords: ['fitness','workout','health','exercise','gym','diet'], products: ['MyFitnessPal','Strava','Fitbod','Noom'], cat: 'Health/Fitness' },
-      { keywords: ['learn','course','education','student','teach','tutor'], products: ['Coursera','Udemy','Teachable','Duolingo'], cat: 'EdTech' },
-      { keywords: ['delivery','food','order','restaurant','menu'], products: ['DoorDash','UberEats','Glovo','Deliveroo'], cat: 'Delivery' },
-      { keywords: ['travel','book','flight','hotel','trip','itinerary'], products: ['Booking.com','Airbnb','Skyscanner','TripIt'], cat: 'Travel' },
-      { keywords: ['real estate','property','rent','apartment','house'], products: ['Zillow','Realtor.com','Apartments.com','Redfin'], cat: 'Real Estate' },
-      { keywords: ['finance','budget','saving','invest','bank','fintech'], products: ['Mint','YNAB','Robinhood','Revolut'], cat: 'Fintech' },
-    ];
-
-    function analyzeIdea(text) {
-      const words = text.toLowerCase();
-      const wordList = words.split(/\s+/);
-      const len = text.length;
-      const wordCount = wordList.length;
-
-      // Score each criterion based on actual keyword matches
-      const scored = CRITERIA.map(c => {
-        let score = 5; // baseline
-        const boostHits = c.boost.filter(kw => words.includes(kw)).length;
-        const penaltyHits = c.penalty.filter(kw => words.includes(kw)).length;
-        score += boostHits * 2;
-        score -= penaltyHits * 2;
-        // Detail bonus: longer descriptions suggest more thought
-        if (wordCount > 30) score += 1;
-        if (wordCount > 60) score += 1;
-        // Add some controlled randomness based on text content
-        const charSum = [...text].reduce((a, ch, i) => a + ch.charCodeAt(0) * (i + 1), 0);
-        const jitter = ((charSum * (c.weight * 100)) % 5) - 2; // -2 to +2
-        score += jitter;
-        score = Math.max(2, Math.min(10, Math.round(score)));
-        const status = score >= 7 ? 'green' : score >= 5 ? 'amber' : 'red';
-        return { name: c.name, desc: c.desc, weight: c.weight, score, status };
-      });
-
-      const maxPossible = scored.reduce((s, c) => s + 10 * c.weight, 0);
-      const actual = scored.reduce((s, c) => s + c.score * c.weight, 0);
-      const totalScore = Math.round((actual / maxPossible) * 80);
-
-      // Find similar products
-      const matched = [];
-      SIMILAR_DB.forEach(e => {
-        const hits = e.keywords.filter(kw => words.includes(kw)).length;
-        if (hits > 0) matched.push({ products: e.products, cat: e.cat, hits });
-      });
-      matched.sort((a, b) => b.hits - a.hits);
-      const topProducts = [...new Set(matched.flatMap(m => m.products))].slice(0, 5);
-      const similar = topProducts.length > 0 ? topProducts : ['No direct competitors found — could be a blue ocean'];
-      const categories = [...new Set(matched.map(m => m.cat))];
-
-      // Verdicts with varied advice
-      let verdict, emoji, css, pillCss, pillText, desc, advice;
-      const topComp = similar[0];
-      const strongCriteria = scored.filter(c => c.score >= 8).map(c => c.name.toLowerCase());
-      const weakCriteria = scored.filter(c => c.score <= 4).map(c => c.name.toLowerCase());
-
-      if (totalScore >= 55) {
-        verdict = "This is a startup."; emoji = "🚀"; css = "verdict-startup"; pillCss = "pill-green"; pillText = "Startup";
-        desc = `Strong scores across the board${strongCriteria.length ? ', especially in ' + strongCriteria.slice(0,2).join(' and ') : ''}. This has real business potential.`;
-        advice = topComp !== 'No direct competitors found — could be a blue ocean'
-          ? `Competitors like ${topComp} validate the market — people are paying for this. Your job now: find the gap they're missing. What specific user segment is underserved? Ship an MVP in 4 weeks, talk to 20 potential users, and iterate from there.`
-          : `No obvious competitors is exciting but risky. It means either you found a blue ocean, or the market doesn't exist yet. Validate fast: can you get 10 people to pay before writing a line of code? Pre-sell it.`;
-      } else if (totalScore >= 35) {
-        verdict = "It could go either way."; emoji = "🧩"; css = "verdict-both"; pillCss = "pill-indigo"; pillText = "Depends on execution";
-        desc = `The idea has merit${weakCriteria.length ? ', but ' + weakCriteria[0] + ' is a concern' : ''}. Execution will determine if this becomes a real business.`;
-        advice = topComp !== 'No direct competitors found — could be a blue ocean'
-          ? `${topComp} already does a version of this. To make it a startup, you need a 10x better experience for a specific niche. Don't build "better ${topComp}" — build the tool that ${topComp}'s most frustrated users wish existed.`
-          : `The concept is interesting but needs sharper focus. Pick ONE user persona, solve their ONE biggest pain, and make it impossibly simple. A feature becomes a startup when it's so good at one thing that people switch their entire workflow around it.`;
-      } else {
-        verdict = "This is a feature."; emoji = "🔌"; css = "verdict-feature"; pillCss = "pill-amber"; pillText = "Feature";
-        desc = `As described, this ${weakCriteria.length > 2 ? 'struggles with ' + weakCriteria.slice(0,2).join(', ') + ' and more' : "doesn't have enough standalone value"}. It would work better inside an existing product.`;
-        advice = topComp !== 'No direct competitors found — could be a blue ocean'
-          ? `This feels like a feature of ${topComp}. But that's not necessarily bad — you could build it as a plugin, integration, or add-on. Many great businesses started as extensions of bigger platforms. Think: what if ${topComp} never builds this? That's your window.`
-          : `The idea is too thin to stand alone. Consider: could you combine this with 2-3 related features to create something bigger? Or could you go deep on a vertical — same concept, but hyper-specialized for one industry?`;
-      }
-
-      return { verdict, emoji, css, pillCss, pillText, desc, advice, totalScore, scored, similar, categories };
-    }
-
-    const steps = ['Reading your idea...','Checking the market...','Scoring criteria...','Finding competitors...','Generating verdict...'];
+    // ── ANALYZE via Claude API ──
+    const steps = ['Reading your idea...','Researching the market...','Scoring 8 criteria...','Finding competitors...','Generating verdict...'];
 
     analyzeBtn.addEventListener('click', async () => {
       const text = ideaInput.value.trim();
@@ -415,15 +312,50 @@
       loading.style.display = 'block';
 
       let step = 0;
-      const iv = setInterval(() => { step = Math.min(step+1, steps.length-1); document.getElementById('loadingStep').textContent = steps[step]; }, 600);
+      const iv = setInterval(() => { step = Math.min(step+1, steps.length-1); document.getElementById('loadingStep').textContent = steps[step]; }, 1200);
 
-      const report = analyzeIdea(text);
-      await new Promise(r => setTimeout(r, 3200));
-      clearInterval(iv);
+      try {
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idea: text })
+        });
 
-      loading.style.display = 'none';
-      results.style.display = 'block';
-      renderResults(report);
+        clearInterval(iv);
+
+        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        // Map API response to render format
+        const v = data.verdict; // "startup", "feature", "maybe"
+        const report = {
+          emoji: v === 'startup' ? '🚀' : v === 'feature' ? '🔌' : '🧩',
+          css: v === 'startup' ? 'verdict-startup' : v === 'feature' ? 'verdict-feature' : 'verdict-both',
+          pillCss: v === 'startup' ? 'pill-green' : v === 'feature' ? 'pill-amber' : 'pill-indigo',
+          pillText: v === 'startup' ? 'Startup' : v === 'feature' ? 'Feature' : 'Could go either way',
+          verdict: data.title,
+          desc: data.summary,
+          totalScore: data.score,
+          scored: data.criteria.map(c => ({
+            name: c.name,
+            desc: c.note,
+            score: c.score,
+            status: c.score >= 7 ? 'green' : c.score >= 5 ? 'amber' : 'red'
+          })),
+          similar: data.similar || ['No competitors found'],
+          advice: data.advice
+        };
+
+        loading.style.display = 'none';
+        results.style.display = 'block';
+        renderResults(report);
+
+      } catch (err) {
+        clearInterval(iv);
+        document.getElementById('loadingStep').textContent = 'Something went wrong — try again';
+        setTimeout(() => { loading.style.display = 'none'; hero.style.display = 'flex'; }, 2000);
+      }
     });
 
     function renderResults(r) {
@@ -464,7 +396,7 @@
       results.querySelectorAll('.fade-up').forEach((el,i) => { el.classList.remove('in'); setTimeout(() => el.classList.add('in'), i * 100); });
     }
 
-    window.loadDemo = (text) => { loading.style.display='none'; results.style.display='block'; renderResults(analyzeIdea(text||EXAMPLES[0])); };
+    window.loadDemo = (text) => { ideaInput.value = text || EXAMPLES[0]; analyzeBtn.click(); };
     ideaInput.addEventListener('keydown', e => { if (e.key === 'Enter' && e.metaKey) analyzeBtn.click(); });
   </script>
 </body>
