@@ -257,6 +257,23 @@
         <p id="advice"></p>
       </div>
 
+      <!-- Share card -->
+      <div class="fade-up" id="shareSection" style="text-align:center;padding:40px 0;margin-bottom:40px;border-top:1px solid var(--border)">
+        <div class="section-label" style="margin-bottom:16px">Share your result</div>
+        <p style="font-size:15px;color:var(--muted);margin-bottom:20px;max-width:380px;margin-left:auto;margin-right:auto">
+          Download your score card and share it on LinkedIn. Let's see who has the best startup idea.
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="generateShareCard()" style="width:auto;margin:0;padding:14px 28px">
+            Download score card ↓
+          </button>
+          <button class="btn btn-secondary" onclick="shareOnLinkedIn()" style="padding:14px 28px">
+            Share on LinkedIn ↗
+          </button>
+        </div>
+        <canvas id="shareCanvas" style="display:none"></canvas>
+      </div>
+
       <div class="cta-section fade-up">
         <div class="section-label" style="margin-bottom:12px">Got a real idea?</div>
         <h2>We build MVPs that <span class="gradient">actually launch.</span></h2>
@@ -394,6 +411,145 @@
 
       // Animate
       results.querySelectorAll('.fade-up').forEach((el,i) => { el.classList.remove('in'); setTimeout(() => el.classList.add('in'), i * 100); });
+    }
+
+    // ── SHARE CARD GENERATOR ──
+    let lastReport = null;
+    const _origRender = renderResults;
+    renderResults = function(r) { lastReport = r; _origRender(r); };
+
+    window.generateShareCard = () => {
+      if (!lastReport) return;
+      const r = lastReport;
+      const canvas = document.getElementById('shareCanvas');
+      const ctx = canvas.getContext('2d');
+      const W = 1080, H = 1080;
+      canvas.width = W; canvas.height = H;
+
+      // Background
+      const grad = ctx.createLinearGradient(0, 0, W, H);
+      if (r.css === 'verdict-startup') { grad.addColorStop(0, '#f0fdf4'); grad.addColorStop(1, '#dcfce7'); }
+      else if (r.css === 'verdict-both') { grad.addColorStop(0, '#eef2ff'); grad.addColorStop(1, '#e0e7ff'); }
+      else { grad.addColorStop(0, '#fffbeb'); grad.addColorStop(1, '#fef3c7'); }
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // White card
+      ctx.fillStyle = '#ffffff';
+      roundRect(ctx, 60, 60, W-120, H-120, 32);
+      ctx.fill();
+      ctx.strokeStyle = '#e7e5e4';
+      ctx.lineWidth = 1;
+      roundRect(ctx, 60, 60, W-120, H-120, 32);
+      ctx.stroke();
+
+      // Emoji
+      ctx.font = '72px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(r.emoji, W/2, 180);
+
+      // Pill
+      const pillColor = r.css === 'verdict-startup' ? '#16a34a' : r.css === 'verdict-both' ? '#4f46e5' : '#d97706';
+      const pillBg = r.css === 'verdict-startup' ? '#dcfce7' : r.css === 'verdict-both' ? '#e0e7ff' : '#fef3c7';
+      ctx.fillStyle = pillBg;
+      roundRect(ctx, W/2-60, 205, 120, 28, 14);
+      ctx.fill();
+      ctx.fillStyle = pillColor;
+      ctx.font = 'bold 11px Inter, Arial, sans-serif';
+      ctx.fillText(r.pillText.toUpperCase(), W/2, 224);
+
+      // Verdict title
+      ctx.fillStyle = '#1c1917';
+      ctx.font = 'bold 36px Inter, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      wrapText(ctx, r.verdict, W/2, 290, W-200, 44);
+
+      // Score
+      ctx.font = 'bold 80px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#1c1917';
+      ctx.fillText(r.totalScore, W/2 - 30, 420);
+      ctx.font = '24px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#a8a29e';
+      ctx.fillText('/ 80', W/2 + 50, 420);
+
+      // Score bar
+      ctx.fillStyle = '#e7e5e4';
+      roundRect(ctx, 140, 450, W-280, 10, 5);
+      ctx.fill();
+      const barW = ((r.totalScore / 80) * (W-280));
+      ctx.fillStyle = pillColor;
+      roundRect(ctx, 140, 450, barW, 10, 5);
+      ctx.fill();
+
+      // Criteria (compact)
+      ctx.textAlign = 'left';
+      const startY = 500;
+      r.scored.forEach((c, i) => {
+        const y = startY + i * 48;
+        const dotColor = c.status === 'green' ? '#16a34a' : c.status === 'amber' ? '#d97706' : '#dc2626';
+        // Dot
+        ctx.fillStyle = dotColor;
+        ctx.beginPath();
+        ctx.arc(160, y + 8, 6, 0, Math.PI * 2);
+        ctx.fill();
+        // Name
+        ctx.fillStyle = '#1c1917';
+        ctx.font = '500 16px Inter, Arial, sans-serif';
+        ctx.fillText(c.name, 180, y + 13);
+        // Score
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#78716c';
+        ctx.font = '500 16px JetBrains Mono, monospace';
+        ctx.fillText(c.score + '/10', W - 140, y + 13);
+        ctx.textAlign = 'left';
+      });
+
+      // Footer
+      ctx.fillStyle = '#a8a29e';
+      ctx.font = '13px Inter, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('startup-or-feature.arcane-studio.com', W/2, H - 100);
+      ctx.fillStyle = '#d4d4d4';
+      ctx.fillText('Built by Arcane Studio', W/2, H - 78);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = 'my-startup-score.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+
+    window.shareOnLinkedIn = () => {
+      const url = encodeURIComponent('https://startup-or-feature.arcane-studio.com');
+      const text = encodeURIComponent(`I just scored my startup idea — ${lastReport?.totalScore || '??'}/80. Is yours a startup or just a feature? Try it yourself 👇`);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`, '_blank');
+    };
+
+    // Canvas helpers
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.lineTo(x+w-r, y);
+      ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+      ctx.lineTo(x+w, y+h-r);
+      ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+      ctx.lineTo(x+r, y+h);
+      ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+      ctx.lineTo(x, y+r);
+      ctx.quadraticCurveTo(x, y, x+r, y);
+      ctx.closePath();
+    }
+    function wrapText(ctx, text, x, y, maxW, lineH) {
+      const words = text.split(' ');
+      let line = '';
+      for (const word of words) {
+        const test = line + word + ' ';
+        if (ctx.measureText(test).width > maxW && line) {
+          ctx.fillText(line.trim(), x, y);
+          line = word + ' '; y += lineH;
+        } else line = test;
+      }
+      ctx.fillText(line.trim(), x, y);
     }
 
     window.loadDemo = (text) => { ideaInput.value = text || EXAMPLES[0]; analyzeBtn.click(); };
