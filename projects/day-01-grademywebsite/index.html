@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GradeMyWebsite — Free Website Audit | Arcane Studio</title>
+  <meta name="description" content="Get an honest, no-BS website audit in 10 seconds. Performance, SEO, accessibility, best practices — scored and explained.">
+  <meta property="og:title" content="GradeMyWebsite — How good is your site, really?">
+  <meta property="og:description" content="Free website audit. Paste your URL, get the truth in 10 seconds.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="stylesheet" href="/src/styles/arcane.css">
+  <style>
+    .grade-ring { width: 200px; height: 200px; position: relative; }
+    .grade-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .grade-ring circle { fill: none; stroke-width: 6; stroke-linecap: round; }
+    .grade-ring .bg { stroke: var(--color-arcane-border); }
+    .grade-ring .fill {
+      stroke: var(--color-arcane-accent);
+      stroke-dasharray: 565; stroke-dashoffset: 565;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .grade-ring .score {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .grade-ring .score-num {
+      font-family: var(--font-display); font-size: 56px; font-weight: 700;
+      color: var(--color-arcane-white); line-height: 1;
+    }
+    .grade-ring .score-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-arcane-muted); margin-top: 4px;
+    }
+    .cat-card {
+      padding: 28px; background: var(--color-arcane-surface);
+      border: 1px solid var(--color-arcane-border); border-radius: 16px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .cat-card:hover { border-color: rgba(200,255,0,0.15); transform: translateY(-2px); }
+    .cat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .cat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .cat-score-sm { font-family: var(--font-display); font-size: 28px; font-weight: 600; }
+    .finding-row {
+      display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px;
+      background: var(--color-arcane-surface); border: 1px solid var(--color-arcane-border);
+      border-radius: 12px; transition: border-color 0.2s;
+    }
+    .finding-row:hover { border-color: rgba(200,255,0,0.12); }
+    .finding-icon {
+      width: 28px; height: 28px; border-radius: 8px; display: flex;
+      align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 2px;
+    }
+    .finding-icon.pass { background: rgba(34,197,94,0.12); color: #22c55e; }
+    .finding-icon.warn { background: rgba(234,179,8,0.12); color: #eab308; }
+    .finding-icon.fail { background: rgba(239,68,68,0.12); color: #ef4444; }
+    .finding-title { font-weight: 500; color: var(--color-arcane-white); font-size: 14px; }
+    .finding-desc { font-size: 13px; color: var(--color-arcane-muted); line-height: 1.6; margin-top: 4px; }
+    .loading-state { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 120px 0; }
+    .loader-ring {
+      width: 56px; height: 56px; border: 2px solid var(--color-arcane-border);
+      border-top-color: var(--color-arcane-accent); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .scan-line {
+      position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9998;
+      background: var(--color-arcane-accent); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .verdict-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px;
+      border-radius: 100px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .verdict-great { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); }
+    .verdict-ok { background: rgba(234,179,8,0.12); color: #eab308; border: 1px solid rgba(234,179,8,0.2); }
+    .verdict-bad { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+  </style>
+</head>
+<body class="noise">
+  <div class="aurora-bg"></div>
+  <div class="scan-line" id="scanLine"></div>
+  <div class="meteors"><div class="meteor"></div><div class="meteor"></div><div class="meteor"></div><div class="meteor"></div><div class="meteor"></div></div>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <header id="hero" class="container" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:80px;padding-bottom:80px">
+    <div class="reveal" style="margin-bottom:24px">
+      <div class="arcane-label" style="display:flex;align-items:center;gap:10px">
+        <span class="pulse-dot"></span>
+        <span>Day 1/30 — Free tool by Arcane Studio</span>
+      </div>
+    </div>
+
+    <h1 class="arcane-heading arcane-display reveal" style="margin-bottom:24px">
+      How good is<br>your site, <span style="color:var(--color-arcane-accent)">really?</span>
+    </h1>
+
+    <p class="arcane-subtitle reveal" style="max-width:520px;margin-bottom:48px">
+      Paste your URL. Get an honest audit in 10 seconds.<br>
+      Performance. SEO. Accessibility. No sugar-coating.
+    </p>
+
+    <div class="reveal" style="display:flex;gap:12px;max-width:640px;width:100%;flex-wrap:wrap">
+      <input type="url" class="input-arcane" placeholder="https://your-website.com" id="urlInput" style="flex:1;min-width:280px">
+      <button class="btn-primary magnetic" id="gradeBtn">
+        Grade my site <span>→</span>
+      </button>
+    </div>
+
+    <div class="reveal" style="margin-top:20px;display:flex;gap:24px;flex-wrap:wrap">
+      <span class="arcane-label" style="opacity:0.5;cursor:pointer" onclick="tryDemo('https://apple.com')">Try: apple.com</span>
+      <span class="arcane-label" style="opacity:0.5;cursor:pointer" onclick="tryDemo('https://wikipedia.org')">Try: wikipedia.org</span>
+      <span class="arcane-label" style="opacity:0.5;cursor:pointer" onclick="tryDemo('https://arcane-studio.com')">Try: arcane-studio.com</span>
+    </div>
+  </header>
+
+  <!-- ═══════════ LOADING ═══════════ -->
+  <section id="loading" class="container" style="display:none">
+    <div class="loading-state">
+      <div class="loader-ring"></div>
+      <div style="text-align:center">
+        <div class="arcane-label" id="loadingStep" style="margin-bottom:8px">Connecting to site...</div>
+        <div class="arcane-mono" id="loadingUrl" style="color:var(--color-arcane-muted)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ RESULTS ═══════════ -->
+  <section id="results" class="container" style="padding:40px 24px 80px;display:none">
+    <div class="reveal" style="display:flex;align-items:center;gap:48px;margin-bottom:64px;flex-wrap:wrap">
+      <div class="grade-ring">
+        <svg viewBox="0 0 200 200">
+          <circle class="bg" cx="100" cy="100" r="90"/>
+          <circle class="fill" id="ringFill" cx="100" cy="100" r="90"/>
+        </svg>
+        <div class="score">
+          <div class="score-num" id="totalScore">0</div>
+          <div class="score-label">Overall</div>
+        </div>
+      </div>
+      <div>
+        <div id="verdict" class="verdict-badge verdict-ok" style="margin-bottom:16px">Analyzing...</div>
+        <h2 class="arcane-heading" style="font-size:clamp(1.5rem,3vw,2rem);margin-bottom:8px" id="siteUrl"></h2>
+        <p class="arcane-subtitle" style="font-size:14px;max-width:400px" id="verdictText"></p>
+      </div>
+    </div>
+
+    <div id="catCards" class="reveal-stagger" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:64px"></div>
+
+    <div class="reveal" style="margin-bottom:64px">
+      <div class="arcane-label" style="margin-bottom:24px">Detailed audit</div>
+      <div id="findings" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+
+    <div class="reveal" style="text-align:center;padding:80px 0;border-top:1px solid var(--color-arcane-border)">
+      <div class="arcane-label" style="margin-bottom:16px">Score not great?</div>
+      <h2 class="arcane-heading arcane-title" style="margin-bottom:12px">
+        We build sites that<br><span style="color:var(--color-arcane-accent)">score 90+.</span>
+      </h2>
+      <p class="arcane-subtitle" style="margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto">
+        Let Arcane Studio fix your performance, SEO, and design.
+      </p>
+      <a href="https://arcane-studio.com/#contact" class="btn-primary magnetic" target="_blank">
+        Get a free audit call <span>↗</span>
+      </a>
+    </div>
+
+    <div style="text-align:center;padding-bottom:40px">
+      <button class="btn-outline" onclick="reset()">Grade another site →</button>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div class="arcane-footer">
+      <a href="https://arcane-studio.com" class="arcane-badge" target="_blank">⚡ Built by Arcane Studio</a>
+      <span class="arcane-label" style="color:var(--color-arcane-border)">Day 1/30</span>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initArcane } from '/src/arcane.js';
+    const { gsap, ScrollTrigger } = initArcane();
+
+    const urlInput = document.getElementById('urlInput');
+    const gradeBtn = document.getElementById('gradeBtn');
+    const hero = document.getElementById('hero');
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const scanLine = document.getElementById('scanLine');
+
+    window.tryDemo = (url) => { urlInput.value = url; gradeBtn.click(); };
+    window.reset = () => {
+      results.style.display = 'none';
+      hero.style.display = 'flex';
+      urlInput.value = '';
+      urlInput.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function normalizeUrl(input) {
+      let url = input.trim();
+      if (!url.match(/^https?:\/\//)) url = 'https://' + url;
+      try { return new URL(url).href; } catch { return null; }
+    }
+
+    async function fetchPageSpeed(url) {
+      const cats = ['PERFORMANCE','ACCESSIBILITY','BEST_PRACTICES','SEO'];
+      const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&${cats.map(c=>`category=${c}`).join('&')}&strategy=mobile`;
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      return res.json();
+    }
+
+    const steps = [
+      'Connecting to site...', 'Measuring performance...', 'Analyzing SEO...',
+      'Checking accessibility...', 'Running best practices audit...', 'Generating report...'
+    ];
+
+    gradeBtn.addEventListener('click', async () => {
+      const url = normalizeUrl(urlInput.value);
+      if (!url) { urlInput.style.borderColor = '#ef4444'; setTimeout(() => urlInput.style.borderColor = '', 1500); return; }
+
+      hero.style.display = 'none';
+      results.style.display = 'none';
+      loading.style.display = 'block';
+      document.getElementById('loadingUrl').textContent = url;
+      scanLine.style.transform = 'scaleX(0)';
+
+      let stepIdx = 0;
+      const stepInterval = setInterval(() => {
+        stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+        document.getElementById('loadingStep').textContent = steps[stepIdx];
+        scanLine.style.transform = `scaleX(${(stepIdx + 1) / steps.length})`;
+      }, 2500);
+
+      try {
+        const data = await fetchPageSpeed(url);
+        clearInterval(stepInterval);
+        scanLine.style.transform = 'scaleX(1)';
+
+        const cats = data.lighthouseResult.categories;
+        const scores = {
+          performance: Math.round((cats.performance?.score || 0) * 100),
+          seo: Math.round((cats.seo?.score || 0) * 100),
+          accessibility: Math.round((cats.accessibility?.score || 0) * 100),
+          bestPractices: Math.round((cats['best-practices']?.score || 0) * 100)
+        };
+        const overall = Math.round((scores.performance + scores.seo + scores.accessibility + scores.bestPractices) / 4);
+        const audits = data.lighthouseResult.audits;
+
+        setTimeout(() => {
+          loading.style.display = 'none';
+          results.style.display = 'block';
+          scanLine.style.transform = 'scaleX(0)';
+          renderResults(url, overall, scores, audits);
+          setTimeout(() => ScrollTrigger.refresh(), 200);
+        }, 600);
+
+      } catch (err) {
+        clearInterval(stepInterval);
+        scanLine.style.transform = 'scaleX(0)';
+        loading.style.display = 'none';
+        hero.style.display = 'flex';
+        urlInput.style.borderColor = '#ef4444';
+        urlInput.value = '';
+        urlInput.placeholder = 'Could not analyze — try another URL';
+        setTimeout(() => { urlInput.style.borderColor = ''; urlInput.placeholder = 'https://your-website.com'; }, 3000);
+      }
+    });
+
+    function renderResults(url, overall, scores, audits) {
+      const ring = document.getElementById('ringFill');
+      const circ = 2 * Math.PI * 90;
+      ring.style.strokeDasharray = circ;
+      setTimeout(() => { ring.style.strokeDashoffset = circ - (overall / 100) * circ; }, 100);
+
+      gsap.to({ val: 0 }, {
+        val: overall, duration: 1.5, ease: 'power2.out',
+        onUpdate: function() { document.getElementById('totalScore').textContent = Math.round(this.targets()[0].val); }
+      });
+
+      const accent = overall >= 80 ? '#22c55e' : overall >= 50 ? '#eab308' : '#ef4444';
+      ring.style.stroke = accent;
+
+      document.getElementById('siteUrl').textContent = new URL(url).hostname;
+      const verdict = document.getElementById('verdict');
+      const vText = document.getElementById('verdictText');
+      if (overall >= 80) {
+        verdict.className = 'verdict-badge verdict-great'; verdict.textContent = '✓ Solid site';
+        vText.textContent = 'Your website performs well across all categories. Minor optimizations could push it even further.';
+      } else if (overall >= 50) {
+        verdict.className = 'verdict-badge verdict-ok'; verdict.textContent = '⚠ Needs work';
+        vText.textContent = "There are significant issues affecting your site's performance and visibility.";
+      } else {
+        verdict.className = 'verdict-badge verdict-bad'; verdict.textContent = '✗ Critical issues';
+        vText.textContent = 'Your website has serious problems that are likely costing you visitors and revenue.';
+      }
+
+      const catData = [
+        { key: 'performance', label: 'Performance', icon: '⚡', color: '#c8ff00' },
+        { key: 'seo', label: 'SEO', icon: '🔍', color: '#6366f1' },
+        { key: 'accessibility', label: 'Accessibility', icon: '♿', color: '#06b6d4' },
+        { key: 'bestPractices', label: 'Best Practices', icon: '🛡', color: '#f59e0b' }
+      ];
+
+      document.getElementById('catCards').innerHTML = catData.map(c => {
+        const s = scores[c.key];
+        const bar = s >= 80 ? '#22c55e' : s >= 50 ? '#eab308' : '#ef4444';
+        return `<div class="cat-card spotlight">
+          <div class="cat-header">
+            <div class="cat-icon" style="background:${c.color}15">${c.icon}</div>
+            <div class="cat-score-sm" style="color:${bar}">${s}</div>
+          </div>
+          <div class="arcane-label" style="margin-bottom:12px">${c.label}</div>
+          <div class="score-bar"><div class="score-bar-fill" style="width:${s}%;background:${bar}"></div></div>
+        </div>`;
+      }).join('');
+
+      const important = [
+        'first-contentful-paint','largest-contentful-paint','total-blocking-time',
+        'cumulative-layout-shift','speed-index','interactive',
+        'meta-description','document-title','http-status-code','is-crawlable',
+        'viewport','image-alt','link-name','color-contrast',
+        'uses-https','no-vulnerable-libraries','errors-in-console',
+        'render-blocking-resources','uses-responsive-images','uses-optimized-images',
+        'modern-image-formats','unused-css-rules','unused-javascript'
+      ];
+
+      document.getElementById('findings').innerHTML = important
+        .filter(id => audits[id])
+        .map(id => {
+          const a = audits[id];
+          const s = a.score;
+          const icon = s === 1 ? 'pass' : s >= 0.5 ? 'warn' : 'fail';
+          const sym = s === 1 ? '✓' : s >= 0.5 ? '!' : '✗';
+          const val = a.displayValue ? ` — ${a.displayValue}` : '';
+          return `<div class="finding-row">
+            <div class="finding-icon ${icon}">${sym}</div>
+            <div>
+              <div class="finding-title">${a.title}${val}</div>
+              <div class="finding-desc">${a.description?.split('[')[0] || ''}</div>
+            </div>
+          </div>`;
+        }).join('');
+
+      document.querySelectorAll('.spotlight').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          el.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          el.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+      });
+    }
+
+    urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') gradeBtn.click(); });
+  </script>
+</body>
+</html>

@@ -619,7 +619,7 @@ const PX = [
       {num:'2',unit:'',label:'Agencies launched',desc:'Two brands launched — simultaneous'},
       {num:'9.5k',unit:'',label:'Leads in pipeline',desc:'WATI WhatsApp outreach database'},
       {num:'165',unit:'',label:'SEO pages indexed',desc:'Automated blog across 3 languages'},
-      {num:'2',unit:'',label:'Agencies launched',desc:'Two brands launched — simultaneous go-live'}
+      {num:'2',unit:'',label:'Markets covered',desc:'France/EU and Israel — dual-market strategy'}
     ],
     roi:{
       rows:[
@@ -631,7 +631,7 @@ const PX = [
       ]
     },
     learnings:[
-      {icon:'01',title:'Same stack, two markets',desc:'Sharing infrastructure cut build time by 60%. Localisation is a content problem, not a tech problem.'},
+      {icon:'01',title:'Same stack, two markets',desc:'Sharing infrastructure cut build time by 60%. Localization is a content problem, not a tech problem.'},
       {icon:'02',title:'Volume beats perfection',desc:'9,500 WhatsApp outreach beats a perfect landing page. Messaging is the variable, not volume.'},
       {icon:'03',title:'SEO compounds',desc:'165 indexed pages in 4 weeks. Automated content + sitemap submission = organic traffic from week 3.'}
     ],
@@ -653,7 +653,7 @@ const PX = [
       {phase:'Audit',desc:'User interviews, drop-off analysis, heuristic review',duration:'Day 1–2',done:true},
       {phase:'IA & flows',desc:'New information architecture, onboarding redesign',duration:'Day 3–5',done:true},
       {phase:'Design',desc:'Dashboard UI, component library, mobile-first',duration:'Day 6–9',done:true},
-      {phase:'AI layer',desc:'Clinical note summarisation integration',duration:'Day 10–12',done:true},
+      {phase:'AI layer',desc:'Clinical note summarization integration',duration:'Day 10–12',done:true},
       {phase:'Handover',desc:'Dev specs, testing, implementation support',duration:'Day 13–14',done:true,active:true}
     ],
     kpis:[
@@ -1017,18 +1017,21 @@ function renderProject(id){
 /* ═══════════ VISUALS PER PROJECT ═══════════ */
 const PROJECT_SCREENS = {
   'ryvdoll-site': {
-    screens: [],
+    screens: [
+      { src:'videos/agent-marketing-demo.mp4', label:'AI Marketing Agent — automated campaigns', note:'Video demo', isVideo:true }
+    ],
     color:'#1a0d2e'
   },
   'ryvdoll-newsletter': {
     screens: [
-      { src:'ryvdoll-editor.png', label:'Éditeur — aperçu temps réel', note:'Product screen', isImg:true },
-      { src:'ryvdoll-abonnes.png', label:'Abonnés — 1,075 actifs', note:'Back-office', isImg:true }
+      { src:'videos/ryvdoll-newsletter-demo.mp4', label:'Newsletter Studio — full demo', note:'Video demo', isVideo:true },
+      { src:'ryvdoll-editor.png', label:'Editor — real-time preview', note:'Product screen', isImg:true }
     ],
     extra: [
-      { src:'ryvdoll-envoyer.png', label:'Envoyer — campagne avril 2026', note:'Send flow', isImg:true },
-      { src:'ryvdoll-csv.png', label:'Import CSV abonnés', note:'Back-office', isImg:true },
-      { src:'ryvdoll-programmer.png', label:'Programmer un envoi', note:'Scheduler', isImg:true }
+      { src:'ryvdoll-abonnes.png', label:'Subscribers — 1,075 active', note:'Back-office', isImg:true },
+      { src:'ryvdoll-envoyer.png', label:'Send — April 2026 campaign', note:'Send flow', isImg:true },
+      { src:'ryvdoll-csv.png', label:'Import CSV subscribers', note:'Back-office', isImg:true },
+      { src:'ryvdoll-programmer.png', label:'Schedule a campaign', note:'Scheduler', isImg:true }
     ],
     color:'#1a0d2e'
   },
@@ -1038,10 +1041,10 @@ const PROJECT_SCREENS = {
   },
   'lancio': {
     screens: [
+      { src:'videos/lancio-bo-demo.mp4', label:'Lancio — back-office & lead management', note:'Video demo', isVideo:true },
       { src:'lancio-site.png', label:'lancio.fr — site live', note:'Site web', isImg:true },
-      { src:'lancio-bo.png', label:'Back-office Lancio — leads & projets', note:'Back-office', isImg:true },
-      { src:'mizra-site.png', label:'getmizra.com — site live', note:'Site web', isImg:true },
-      { src:'mizra-bo.png', label:'Back-office Mizra — WATI & leads', note:'Back-office', isImg:true }
+      { src:'videos/mizra-bo-demo.mp4', label:'Mizra — CRM, WATI & outreach', note:'Video demo', isVideo:true },
+      { src:'mizra-site.png', label:'getmizra.com — site live', note:'Site web', isImg:true }
     ],
     color:'#080d1a'
   },
@@ -1072,6 +1075,14 @@ function visuals(p){
   function screenBlock(s, wide){
     if(!s) return '';
     const ratio = wide ? '16/6' : '4/3';
+    if(s.isVideo){
+      return `<div style="position:relative;${wide?'width:100%':'flex:1'};aspect-ratio:${ratio};overflow:hidden;background:${bg}">
+        <video src="${s.src}" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;object-position:top left;display:block"></video>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:48px;background:linear-gradient(to top,${bg} 10%,transparent)"></div>
+        <div style="position:absolute;bottom:14px;left:20px;font-family:var(--fd);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)">${s.label}</div>
+        <div style="position:absolute;top:10px;right:14px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:rgba(0,0,0,.35);color:rgba(255,255,255,.6);padding:3px 10px;border-radius:20px;backdrop-filter:blur(4px)">${s.note}</div>
+      </div>`;
+    }
     if(s.isImg){
       return `<div style="position:relative;${wide?'width:100%':'flex:1'};aspect-ratio:${ratio};overflow:hidden;background:${bg}">
         <img src="${s.src}" style="width:100%;height:100%;object-fit:cover;object-position:top left;display:block"/>

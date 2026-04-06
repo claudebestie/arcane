@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Name — Arcane Studio</title>
+  <meta name="description" content="Project description here.">
+  <meta property="og:title" content="Project Name — Arcane Studio">
+  <meta property="og:description" content="Project description here.">
+  <meta property="og:image" content="/og.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="stylesheet" href="/src/styles/arcane.css">
+</head>
+<body class="noise">
+
+  <!-- AURORA BACKGROUND -->
+  <div class="aurora-bg"></div>
+
+  <!-- METEORS (optional: add more .meteor divs for density) -->
+  <div class="meteors">
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+  </div>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <header class="container" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:80px;padding-bottom:80px">
+
+    <div class="reveal" style="margin-bottom:24px">
+      <div class="arcane-label" style="display:flex;align-items:center;gap:10px">
+        <span class="pulse-dot"></span>
+        <span>Free tool by Arcane Studio</span>
+      </div>
+    </div>
+
+    <h1 class="arcane-heading arcane-display reveal" style="margin-bottom:24px">
+      Project<br>
+      <span style="color:var(--color-arcane-accent)">Name</span>
+    </h1>
+
+    <p class="arcane-subtitle reveal" style="max-width:520px;margin-bottom:48px">
+      One-liner describing what this tool does and why it matters.
+    </p>
+
+    <!-- MAIN INPUT AREA -->
+    <div class="reveal" style="display:flex;gap:12px;max-width:600px;width:100%">
+      <input
+        type="text"
+        class="input-arcane"
+        placeholder="Enter a URL, keyword, or value..."
+        id="mainInput"
+        style="flex:1"
+      >
+      <button class="btn-primary magnetic" id="mainBtn">
+        Analyze
+        <span>→</span>
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ═══════════ RESULTS ═══════════ -->
+  <section id="results" class="container" style="padding:80px 24px;display:none">
+
+    <!-- SCORE OVERVIEW -->
+    <div class="reveal" style="margin-bottom:64px">
+      <div class="arcane-label" style="margin-bottom:16px">Overall Score</div>
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px">
+        <span class="metric-value" id="overallScore">—</span>
+        <span class="arcane-label">/100</span>
+      </div>
+      <div class="score-bar" style="max-width:400px">
+        <div class="score-bar-fill" id="overallBar" data-score="0"></div>
+      </div>
+    </div>
+
+    <!-- METRIC CARDS GRID -->
+    <div class="reveal-stagger" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:64px">
+
+      <div class="glass-card spotlight" style="padding:32px">
+        <div class="arcane-label" style="margin-bottom:12px">Metric 1</div>
+        <div class="metric-value" style="margin-bottom:8px">—</div>
+        <div class="score-bar">
+          <div class="score-bar-fill" data-score="0"></div>
+        </div>
+      </div>
+
+      <div class="glass-card spotlight" style="padding:32px">
+        <div class="arcane-label" style="margin-bottom:12px">Metric 2</div>
+        <div class="metric-value" style="margin-bottom:8px">—</div>
+        <div class="score-bar">
+          <div class="score-bar-fill" data-score="0"></div>
+        </div>
+      </div>
+
+      <div class="glass-card spotlight" style="padding:32px">
+        <div class="arcane-label" style="margin-bottom:12px">Metric 3</div>
+        <div class="metric-value" style="margin-bottom:8px">—</div>
+        <div class="score-bar">
+          <div class="score-bar-fill" data-score="0"></div>
+        </div>
+      </div>
+
+      <div class="glass-card spotlight" style="padding:32px">
+        <div class="arcane-label" style="margin-bottom:12px">Metric 4</div>
+        <div class="metric-value" style="margin-bottom:8px">—</div>
+        <div class="score-bar">
+          <div class="score-bar-fill" data-score="0"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DETAILED FINDINGS -->
+    <div class="reveal" style="margin-bottom:64px">
+      <div class="arcane-label" style="margin-bottom:24px">Detailed Findings</div>
+      <div id="findings" style="display:flex;flex-direction:column;gap:12px">
+        <!-- JS populates this -->
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="reveal" style="text-align:center;padding:80px 0;border-top:1px solid var(--color-arcane-border)">
+      <div class="arcane-label" style="margin-bottom:16px">Need help fixing this?</div>
+      <h2 class="arcane-heading arcane-title" style="margin-bottom:32px">
+        Let's build something<br><span style="color:var(--color-arcane-accent)">that works.</span>
+      </h2>
+      <a href="https://arcane-studio.com/#contact" class="btn-primary magnetic" target="_blank">
+        Talk to Arcane
+        <span>↗</span>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="container">
+    <div class="arcane-footer">
+      <a href="https://arcane-studio.com" class="arcane-badge" target="_blank">
+        ⚡ Built by Arcane Studio
+      </a>
+      <span class="arcane-label" style="color:var(--color-arcane-border)">Day X/30</span>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initArcane } from '/src/arcane.js';
+
+    // Initialize all premium interactions
+    const { gsap, ScrollTrigger } = initArcane();
+
+    // ── YOUR PROJECT LOGIC HERE ──────────
+    const input = document.getElementById('mainInput');
+    const btn = document.getElementById('mainBtn');
+    const results = document.getElementById('results');
+
+    btn.addEventListener('click', async () => {
+      const value = input.value.trim();
+      if (!value) return;
+
+      // Show loading state
+      btn.innerHTML = '<span class="shimmer" style="width:60px;height:14px;display:block;border-radius:4px"></span>';
+      btn.disabled = true;
+
+      // TODO: Replace with actual API call / analysis logic
+      await new Promise(r => setTimeout(r, 2000));
+
+      // Show results
+      results.style.display = 'block';
+      btn.innerHTML = 'Analyze <span>→</span>';
+      btn.disabled = false;
+
+      // Scroll to results
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Trigger reveal animations
+      setTimeout(() => ScrollTrigger.refresh(), 100);
+    });
+  </script>
+
+</body>
+</html>
