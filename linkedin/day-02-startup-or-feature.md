@@ -12,6 +12,6 @@ Day 2 of my 30-in-30 challenge. One free tool, every day, for 30 days.
 
 Try it here: startup-or-feature.arcane-studio.com
 
-What's your idea? Drop it in the comments — I'm curious to see the results.
+Once you get your score — download your score card and share it here. I want to see who scores highest.
 
 #BuildInPublic #Startup #ArcaneStudio
