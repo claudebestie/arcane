@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startup or Feature? — Free Idea Analyzer | Arcane Studio</title>
+  <meta name="description" content="Describe your idea. We'll tell you if it's a real startup or just a feature of something that already exists.">
+  <meta property="og:title" content="Is your idea a startup... or just a feature?">
+  <meta property="og:description" content="Paste your idea. Get an honest verdict in seconds.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <link rel="stylesheet" href="/src/styles/arcane.css">
+  <style>
+    .verdict-card {
+      padding: 48px; border-radius: 20px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .verdict-startup { background: linear-gradient(135deg, rgba(34,197,94,0.1), rgba(34,197,94,0.02)); border: 1px solid rgba(34,197,94,0.2); }
+    .verdict-feature { background: linear-gradient(135deg, rgba(234,179,8,0.1), rgba(234,179,8,0.02)); border: 1px solid rgba(234,179,8,0.2); }
+    .verdict-both { background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(99,102,241,0.02)); border: 1px solid rgba(99,102,241,0.2); }
+    .verdict-emoji { font-size: 64px; margin-bottom: 20px; }
+    .verdict-label { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; }
+    .verdict-title { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 600; color: var(--color-arcane-white); margin-bottom: 16px; }
+    .criteria-row {
+      display: flex; align-items: center; gap: 16px; padding: 20px 24px;
+      background: var(--color-arcane-surface); border: 1px solid var(--color-arcane-border);
+      border-radius: 12px; transition: border-color 0.2s;
+    }
+    .criteria-row:hover { border-color: rgba(200,255,0,0.12); }
+    .criteria-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .criteria-icon.yes { background: rgba(34,197,94,0.12); color: #22c55e; }
+    .criteria-icon.no { background: rgba(239,68,68,0.12); color: #ef4444; }
+    .criteria-icon.maybe { background: rgba(234,179,8,0.12); color: #eab308; }
+    .criteria-name { font-weight: 500; color: var(--color-arcane-white); font-size: 14px; }
+    .criteria-desc { font-size: 12px; color: var(--color-arcane-muted); margin-top: 2px; }
+    .score-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+      border-radius: 100px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+    }
+    .pill-startup { background: rgba(34,197,94,0.12); color: #22c55e; }
+    .pill-feature { background: rgba(234,179,8,0.12); color: #eab308; }
+    textarea.input-arcane {
+      resize: vertical; min-height: 120px; font-family: var(--font-display);
+      line-height: 1.6;
+    }
+    .example-chip {
+      display: inline-block; padding: 8px 16px; border-radius: 100px;
+      border: 1px solid var(--color-arcane-border); font-size: 12px;
+      color: var(--color-arcane-muted); cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .example-chip:hover { border-color: var(--color-arcane-accent); color: var(--color-arcane-white); }
+  </style>
+</head>
+<body class="noise">
+  <div class="aurora-bg"></div>
+  <div class="meteors"><div class="meteor"></div><div class="meteor"></div><div class="meteor"></div></div>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <header id="hero" class="container" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:80px;padding-bottom:80px">
+    <div class="reveal" style="margin-bottom:24px">
+      <div class="arcane-label" style="display:flex;align-items:center;gap:10px">
+        <span class="pulse-dot"></span>
+        <span>Day 2/30 — Free tool by Arcane Studio</span>
+      </div>
+    </div>
+
+    <h1 class="arcane-heading arcane-display reveal" style="margin-bottom:24px">
+      Startup<br>or <span style="color:var(--color-arcane-accent)">feature?</span>
+    </h1>
+
+    <p class="arcane-subtitle reveal" style="max-width:520px;margin-bottom:40px">
+      Describe your idea. We'll score it on 8 criteria and tell you<br>
+      if it's a real business — or just a feature of something that already exists.
+    </p>
+
+    <div class="reveal" style="max-width:600px;width:100%">
+      <textarea class="input-arcane" id="ideaInput" placeholder="Describe your idea in a few sentences...&#10;&#10;Example: An app that lets restaurant owners see real-time reviews from Google, TripAdvisor and Yelp in one dashboard with AI-generated reply suggestions."></textarea>
+      <div style="margin-top:12px">
+        <button class="btn-primary magnetic" id="analyzeBtn" style="width:100%">
+          Analyze my idea <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="example-chip" onclick="tryExample(0)">AI meeting notes</span>
+      <span class="example-chip" onclick="tryExample(1)">Freelancer invoice tool</span>
+      <span class="example-chip" onclick="tryExample(2)">Neighborhood app</span>
+      <span class="example-chip" onclick="tryExample(3)">Crypto portfolio</span>
+    </div>
+  </header>
+
+  <!-- ═══════════ LOADING ═══════════ -->
+  <section id="loading" class="container" style="display:none;padding:120px 0;text-align:center">
+    <div style="width:56px;height:56px;border:2px solid var(--color-arcane-border);border-top-color:var(--color-arcane-accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 24px"></div>
+    <div class="arcane-label" id="loadingStep">Analyzing your idea...</div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  </section>
+
+  <!-- ═══════════ RESULTS ═══════════ -->
+  <section id="results" class="container" style="padding:40px 24px 80px;display:none">
+
+    <!-- Verdict card -->
+    <div id="verdictCard" class="reveal verdict-card verdict-feature" style="margin-bottom:48px">
+      <div class="verdict-emoji" id="verdictEmoji">💡</div>
+      <div class="verdict-label" id="verdictLabel" style="color:var(--color-arcane-muted)">Verdict</div>
+      <div class="verdict-title" id="verdictTitle">Analyzing...</div>
+      <p class="arcane-subtitle" style="font-size:14px;max-width:480px;margin:0 auto" id="verdictDesc"></p>
+    </div>
+
+    <!-- Startup Score -->
+    <div class="reveal" style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div class="arcane-label">Startup score</div>
+      <div id="startupScore" class="metric-value" style="font-size:36px">0</div>
+      <div class="arcane-label" style="color:var(--color-arcane-border)">/80</div>
+      <div style="flex:1;max-width:300px">
+        <div class="score-bar"><div class="score-bar-fill" id="startupBar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Criteria grid -->
+    <div class="reveal" style="margin-bottom:48px">
+      <div class="arcane-label" style="margin-bottom:20px">8 criteria analyzed</div>
+      <div id="criteriaList" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+
+    <!-- Similar products -->
+    <div class="reveal" style="margin-bottom:48px">
+      <div class="arcane-label" style="margin-bottom:20px">Similar products that exist</div>
+      <div id="similarList" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+
+    <!-- Advice -->
+    <div class="reveal glass-card" style="padding:32px;margin-bottom:48px">
+      <div class="arcane-label" style="margin-bottom:12px">Our take</div>
+      <p id="advice" style="font-size:15px;color:var(--color-arcane-text);line-height:1.8"></p>
+    </div>
+
+    <!-- CTA -->
+    <div class="reveal" style="text-align:center;padding:80px 0;border-top:1px solid var(--color-arcane-border)">
+      <div class="arcane-label" style="margin-bottom:16px">Got a real startup idea?</div>
+      <h2 class="arcane-heading arcane-title" style="margin-bottom:12px">
+        We build MVPs<br><span style="color:var(--color-arcane-accent)">that launch.</span>
+      </h2>
+      <p class="arcane-subtitle" style="margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto">
+        From idea to live product. Arcane Studio ships fast.
+      </p>
+      <a href="https://arcane-studio.com/#contact" class="btn-primary magnetic" target="_blank">
+        Let's talk <span>↗</span>
+      </a>
+    </div>
+
+    <div style="text-align:center;padding-bottom:40px">
+      <button class="btn-outline" onclick="reset()">Try another idea →</button>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div class="arcane-footer">
+      <a href="https://arcane-studio.com" class="arcane-badge" target="_blank">⚡ Built by Arcane Studio</a>
+      <span class="arcane-label" style="color:var(--color-arcane-border)">Day 2/30</span>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initArcane } from '/src/arcane.js';
+    const { gsap, ScrollTrigger } = initArcane();
+
+    const ideaInput = document.getElementById('ideaInput');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const hero = document.getElementById('hero');
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+
+    const EXAMPLES = [
+      "An app that automatically transcribes meetings, extracts action items, and sends follow-up emails to participants with their assigned tasks.",
+      "A tool for freelancers that generates branded invoices, tracks payments, sends automatic reminders, and provides a dashboard with revenue analytics.",
+      "A hyperlocal social network where neighbors can share recommendations, organize events, lend tools, and coordinate about local issues like parking or safety.",
+      "A mobile app that aggregates all your crypto wallets and exchange accounts into one portfolio view with real-time P&L tracking and tax reports."
+    ];
+
+    window.tryExample = (i) => { ideaInput.value = EXAMPLES[i]; analyzeBtn.click(); };
+    window.reset = () => {
+      results.style.display = 'none';
+      hero.style.display = 'flex';
+      ideaInput.value = '';
+      ideaInput.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // ── SCORING ENGINE ──
+    function hashStr(s) { let h=0; for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;} return Math.abs(h); }
+    function seeded(seed, min, max) { return min + (seed % (max - min + 1)); }
+
+    const CRITERIA = [
+      { name: 'Standalone value', desc: 'Does it solve a problem on its own, without needing another product?', weight: 2 },
+      { name: 'Willingness to pay', desc: 'Would people pay for this specifically?', weight: 2 },
+      { name: 'Market size', desc: 'Is the target audience large enough to sustain a business?', weight: 1.5 },
+      { name: 'Defensibility', desc: 'Is there a moat — network effects, data, brand, or switching costs?', weight: 1.5 },
+      { name: 'Differentiation', desc: 'Does it do something meaningfully different from what exists?', weight: 1 },
+      { name: 'Complexity', desc: 'Does it require enough engineering depth to be a product, not a script?', weight: 1 },
+      { name: 'Retention potential', desc: 'Would users come back daily or weekly?', weight: 1 },
+      { name: 'Revenue model clarity', desc: 'Is there a clear, obvious way to monetize?', weight: 1 }
+    ];
+
+    const SIMILAR_DB = [
+      { keywords: ['meeting', 'transcri', 'notes', 'action items'], products: ['Otter.ai', 'Fireflies.ai', 'Grain', 'tl;dv'] },
+      { keywords: ['invoice', 'freelanc', 'payment', 'billing'], products: ['FreshBooks', 'Wave', 'Bonsai', 'Invoicely'] },
+      { keywords: ['neighbor', 'local', 'community', 'hyperlocal'], products: ['Nextdoor', 'Facebook Groups', 'Citizen', 'Patch'] },
+      { keywords: ['crypto', 'portfolio', 'wallet', 'exchange'], products: ['CoinGecko', 'Delta', 'Zerion', 'CoinTracker'] },
+      { keywords: ['review', 'restaurant', 'reputation'], products: ['Birdeye', 'Podium', 'ReviewTrackers', 'Yext'] },
+      { keywords: ['email', 'marketing', 'newsletter', 'campaign'], products: ['Mailchimp', 'Brevo', 'ConvertKit', 'Beehiiv'] },
+      { keywords: ['project', 'manage', 'task', 'team'], products: ['Notion', 'Asana', 'Linear', 'Monday.com'] },
+      { keywords: ['social media', 'schedule', 'post', 'content'], products: ['Buffer', 'Hootsuite', 'Later', 'Typefully'] },
+      { keywords: ['analytics', 'dashboard', 'metrics', 'data'], products: ['Mixpanel', 'Amplitude', 'PostHog', 'Plausible'] },
+      { keywords: ['ecommerce', 'store', 'shop', 'sell'], products: ['Shopify', 'WooCommerce', 'Gumroad', 'Lemonsqueezy'] },
+    ];
+
+    function analyzeIdea(text) {
+      const h = hashStr(text);
+      const words = text.toLowerCase();
+      const len = text.length;
+
+      // Score each criterion
+      const scored = CRITERIA.map((c, i) => {
+        const base = seeded(h * (i + 7), 3, 10);
+        // Longer, more detailed ideas score slightly higher
+        const bonus = Math.min(2, Math.floor(len / 150));
+        const score = Math.min(10, base + bonus);
+        const status = score >= 7 ? 'yes' : score >= 5 ? 'maybe' : 'no';
+        return { ...c, score, status };
+      });
+
+      const totalScore = Math.round(scored.reduce((sum, c) => sum + c.score * c.weight, 0) / scored.reduce((sum, c) => sum + 10 * c.weight, 0) * 80);
+
+      // Find similar products
+      const matchedSimilar = [];
+      SIMILAR_DB.forEach(entry => {
+        const matches = entry.keywords.filter(kw => words.includes(kw));
+        if (matches.length > 0) matchedSimilar.push(...entry.products);
+      });
+      const similar = matchedSimilar.length > 0
+        ? [...new Set(matchedSimilar)].slice(0, 4)
+        : ['No exact matches found — could be a blue ocean or too niche to tell.'];
+
+      // Verdict
+      let verdict, emoji, cssClass, desc, advice;
+      if (totalScore >= 55) {
+        verdict = "This is a startup.";
+        emoji = "🚀";
+        cssClass = "verdict-startup";
+        desc = "Your idea has strong standalone value, a clear market, and enough complexity to be a real product.";
+        advice = `This scores well across most criteria. The key question is execution speed — can you get an MVP in front of users within 4 weeks? Focus on the one thing that makes this different from ${matchedSimilar[0] || 'existing solutions'} and build around that. Don't try to do everything on day one.`;
+      } else if (totalScore >= 35) {
+        verdict = "It's a feature... that could become a startup.";
+        emoji = "🧩";
+        cssClass = "verdict-both";
+        desc = "The core idea is solid, but it might live better inside an existing product — unless you find the right angle.";
+        advice = `Right now, this looks like something ${matchedSimilar[0] || 'a bigger product'} could add as a feature. But that doesn't mean it's dead — many great startups started as features. The path forward: find the underserved niche that the big players ignore, and go deep on that. Make it 10x better for a specific audience.`;
+      } else {
+        verdict = "This is a feature.";
+        emoji = "🔌";
+        cssClass = "verdict-feature";
+        desc = "As described, this would work better as a feature of an existing product than as a standalone business.";
+        advice = `The problem you're describing is real, but the solution doesn't have enough differentiation or standalone value to build a company around. Consider: could you build this as a plugin, integration, or add-on for ${matchedSimilar[0] || 'an existing platform'}? That could be a great lifestyle business without the pressure of VC-scale ambition.`;
+      }
+
+      return { verdict, emoji, cssClass, desc, advice, totalScore, scored, similar };
+    }
+
+    // ── LOADING STEPS ──
+    const steps = ['Reading your idea...', 'Checking market landscape...', 'Scoring criteria...', 'Finding similar products...', 'Generating verdict...'];
+
+    // ── ANALYZE ──
+    analyzeBtn.addEventListener('click', async () => {
+      const text = ideaInput.value.trim();
+      if (!text || text.length < 20) {
+        ideaInput.style.borderColor = '#ef4444';
+        ideaInput.placeholder = 'Please describe your idea in at least a few sentences...';
+        setTimeout(() => { ideaInput.style.borderColor = ''; }, 2000);
+        return;
+      }
+
+      hero.style.display = 'none';
+      results.style.display = 'none';
+      loading.style.display = 'block';
+
+      let step = 0;
+      const interval = setInterval(() => {
+        step = Math.min(step + 1, steps.length - 1);
+        document.getElementById('loadingStep').textContent = steps[step];
+      }, 600);
+
+      const report = analyzeIdea(text);
+      await new Promise(r => setTimeout(r, 3500));
+      clearInterval(interval);
+
+      loading.style.display = 'none';
+      results.style.display = 'block';
+      renderResults(report);
+      setTimeout(() => ScrollTrigger.refresh(), 200);
+    });
+
+    // ── RENDER ──
+    function renderResults(report) {
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
+      document.querySelectorAll('.reveal-stagger > *').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+
+      // Verdict card
+      const card = document.getElementById('verdictCard');
+      card.className = `reveal verdict-card ${report.cssClass} in`;
+      document.getElementById('verdictEmoji').textContent = report.emoji;
+      document.getElementById('verdictTitle').textContent = report.verdict;
+      document.getElementById('verdictDesc').textContent = report.desc;
+
+      const labelColor = report.cssClass === 'verdict-startup' ? '#22c55e' : report.cssClass === 'verdict-both' ? '#6366f1' : '#eab308';
+      document.getElementById('verdictLabel').style.color = labelColor;
+      document.getElementById('verdictLabel').textContent = report.totalScore >= 55 ? '🟢 Startup' : report.totalScore >= 35 ? '🟣 Could go either way' : '🟡 Feature';
+
+      // Startup score
+      document.getElementById('startupScore').textContent = report.totalScore;
+      const bar = document.getElementById('startupBar');
+      const pct = (report.totalScore / 80) * 100;
+      const barColor = pct >= 70 ? '#22c55e' : pct >= 45 ? '#eab308' : '#ef4444';
+      setTimeout(() => { bar.style.width = pct + '%'; bar.style.background = barColor; }, 100);
+
+      gsap.to({ val: 0 }, {
+        val: report.totalScore, duration: 1.5, ease: 'power2.out',
+        onUpdate: function() { document.getElementById('startupScore').textContent = Math.round(this.targets()[0].val); }
+      });
+
+      // Criteria
+      document.getElementById('criteriaList').innerHTML = report.scored.map(c => {
+        const icon = c.status === 'yes' ? '✓' : c.status === 'maybe' ? '~' : '✗';
+        return `<div class="criteria-row">
+          <div class="criteria-icon ${c.status}">${icon}</div>
+          <div style="flex:1">
+            <div class="criteria-name">${c.name} <span style="color:var(--color-arcane-muted);font-weight:400;font-size:12px">${c.score}/10</span></div>
+            <div class="criteria-desc">${c.desc}</div>
+          </div>
+          <div class="score-pill ${c.score >= 7 ? 'pill-startup' : 'pill-feature'}">${c.score >= 7 ? 'Strong' : c.score >= 5 ? 'Moderate' : 'Weak'}</div>
+        </div>`;
+      }).join('');
+
+      // Similar products
+      document.getElementById('similarList').innerHTML = report.similar.map(s =>
+        `<div class="criteria-row">
+          <div style="font-size:14px;color:var(--color-arcane-white)">${s}</div>
+        </div>`
+      ).join('');
+
+      // Advice
+      document.getElementById('advice').textContent = report.advice;
+
+      document.querySelectorAll('.spotlight').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          el.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          el.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+      });
+    }
+
+    window.loadDemo = (text) => {
+      loading.style.display = 'none';
+      results.style.display = 'block';
+      renderResults(analyzeIdea(text || EXAMPLES[0]));
+    };
+
+    ideaInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.metaKey) analyzeBtn.click(); });
+  </script>
+</body>
+</html>
