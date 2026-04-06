@@ -271,27 +271,13 @@
 
       } catch (err) {
         clearInterval(stepInterval);
-        scanLine.style.transform = 'scaleX(0)';
-        // Show error inline instead of silently resetting
-        document.getElementById('loadingStep').textContent = '';
-        document.getElementById('loadingUrl').textContent = '';
-        document.querySelector('.loader-ring').style.display = 'none';
-        const errBox = document.createElement('div');
-        errBox.innerHTML = `
-          <div style="text-align:center;max-width:420px">
-            <div style="font-size:40px;margin-bottom:16px">⚠️</div>
-            <div class="arcane-heading" style="font-size:20px;margin-bottom:12px">Google's API is rate-limited</div>
-            <p class="arcane-subtitle" style="font-size:13px;margin-bottom:24px">
-              The free PageSpeed API has usage limits. Try again in a few seconds, or try a different URL.
-            </p>
-            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-              <button class="btn-primary" onclick="location.reload()">Try again</button>
-              <button class="btn-outline" onclick="loadDemo('${url}')">See demo results</button>
-            </div>
-          </div>`;
-        const loadState = document.querySelector('.loading-state');
-        loadState.innerHTML = '';
-        loadState.appendChild(errBox);
+        scanLine.style.transform = 'scaleX(1)';
+        // Auto-fallback to demo results — seamless experience
+        setTimeout(() => {
+          loading.style.display = 'none';
+          scanLine.style.transform = 'scaleX(0)';
+          window.loadDemo(url, true);
+        }, 800);
       }
     });
 
@@ -380,14 +366,17 @@
     }
 
     // ── DEMO MODE (fallback when API is rate-limited) ──
-    window.loadDemo = (url) => {
+    window.loadDemo = (url, isFallback = false) => {
       loading.style.display = 'none';
       results.style.display = 'block';
       document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
       document.querySelectorAll('.reveal-stagger > *').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
 
-      const demoScores = { performance: 58, seo: 82, accessibility: 71, bestPractices: 88 };
-      const demoOverall = Math.round((58+82+71+88)/4);
+      // Generate pseudo-random scores from URL hash for consistency
+      const hash = [...(url||'demo')].reduce((a,c)=>a+c.charCodeAt(0),0);
+      const r = (min,max,seed) => min + ((hash*seed)%((max-min)+1));
+      const demoScores = { performance: r(35,78,7), seo: r(55,95,13), accessibility: r(50,90,17), bestPractices: r(60,98,23) };
+      const demoOverall = Math.round((demoScores.performance+demoScores.seo+demoScores.accessibility+demoScores.bestPractices)/4);
       const demoAudits = {
         'first-contentful-paint': { score: 0.3, title: 'First Contentful Paint', displayValue: '3.2 s', description: 'First Contentful Paint marks the time at which the first text or image is painted.' },
         'largest-contentful-paint': { score: 0.2, title: 'Largest Contentful Paint', displayValue: '4.8 s', description: 'Largest Contentful Paint marks the time at which the largest text or image is painted.' },
@@ -405,6 +394,12 @@
         'image-alt': { score: 1, title: 'Image elements have alt attributes', displayValue: null, description: 'Informative elements should aim for short, descriptive alternate text.' }
       };
       renderResults(url || 'https://example.com', demoOverall, demoScores, demoAudits);
+      if (isFallback) {
+        const banner = document.createElement('div');
+        banner.style.cssText = 'text-align:center;padding:10px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.15);border-radius:8px;margin-bottom:24px;font-size:12px;color:#eab308;letter-spacing:0.05em';
+        banner.textContent = 'Simulated results — Google API was rate-limited. Try again later for live data.';
+        results.insertBefore(banner, results.firstChild);
+      }
       setTimeout(() => ScrollTrigger.refresh(), 200);
     };
 
