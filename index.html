@@ -450,6 +450,7 @@ body.nav-open #ham span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px
       <div class="sn-link" data-p="home"    onclick="go('home')">Home</div>
       <div class="sn-link" data-p="work"    onclick="go('work')">Work</div>
       <div class="sn-link" data-p="studio"  onclick="go('studio')">Studio</div>
+      <div class="sn-link" data-p="lab"     onclick="go('lab')">Lab</div>
       <div class="sn-link" data-p="contact" onclick="go('contact')">Contact</div>
     </div>
   </div>
@@ -1152,12 +1153,74 @@ function visuals(p){
     </div>`;
 }
 
+/* ═══════════ LAB DATA & RENDER ═══════════ */
+const LAB = [
+  {
+    day: 1, name: 'GradeMyWebsite', tag: 'Tool',
+    desc: 'Paste any URL — get a full website audit in seconds. Performance, SEO, accessibility, graded A to F.',
+    url: 'https://grademywebsite.arcane-studio.com',
+    color: '#c8ff00', bg: 'linear-gradient(135deg,#0a0a0b,#1a1a2e)'
+  },
+  {
+    day: 2, name: 'Startup or Feature?', tag: 'Fun',
+    desc: 'Describe your idea — AI tells you if it\'s a real startup or just a feature of something that exists.',
+    url: 'https://startup-or-feature.arcane-studio.com',
+    color: '#7c3aed', bg: 'linear-gradient(135deg,#1a0a2e,#2d1548)'
+  }
+];
+
+function renderLab(){
+  const cards = LAB.map(p => `
+    <a href="${p.url}" target="_blank" style="
+      display:block;padding:36px 32px;border-radius:16px;position:relative;overflow:hidden;
+      background:${p.bg};border:1px solid rgba(255,255,255,.06);
+      transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .25s;cursor:none;text-decoration:none;
+    " onmouseenter="this.style.transform='translateY(-4px)';this.style.borderColor='${p.color}33'"
+       onmouseleave="this.style.transform='';this.style.borderColor='rgba(255,255,255,.06)'">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+          background:${p.color}18;color:${p.color};padding:4px 12px;border-radius:100px">${p.tag}</span>
+        <span style="font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.3)">Day ${p.day}/30</span>
+      </div>
+      <div style="font-family:var(--fd);font-size:clamp(24px,3vw,32px);font-weight:500;text-transform:uppercase;
+        color:var(--w);margin-bottom:10px;line-height:1.1">${p.name}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.7;max-width:380px">${p.desc}</div>
+      <div style="margin-top:20px;display:flex;align-items:center;gap:8px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${p.color}">Try it live</span>
+        <span style="color:${p.color};font-size:13px;transition:transform .2s">↗</span>
+      </div>
+    </a>`).join('');
+
+  return `
+    <div style="padding:120px 44px 32px">
+      <div class="sec-tag reveal">Lab — 30 in 30</div>
+      <div style="margin-top:20px;font-family:var(--fd);font-size:clamp(48px,7vw,80px);font-weight:500;line-height:.92;
+        text-transform:uppercase;color:var(--w)" class="reveal">
+        30 tools.<br><span class="it">30 days.</span>
+      </div>
+      <div style="margin-top:16px;font-size:14px;color:var(--mid);max-width:420px;line-height:1.8" class="reveal">
+        We're building and shipping one free tool every day for 30 days.<br>
+        Each one is live, functional, and open to try.
+      </div>
+    </div>
+
+    <div style="padding:32px 44px 72px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px" class="reveal">
+      ${cards}
+    </div>
+
+    ${MARQUEE}
+    ${NUMBERS}
+    ${CTA('Like what you see?','Let\\'s build<br>something <span class="aw">together.</span>')}
+    ${FOOTER}`;
+}
+
 /* ═══════════ RENDER ═══════════ */
 function render(){
   const app=document.getElementById('app');
   if(page==='home')         app.innerHTML=renderHome();
   else if(page==='work')    app.innerHTML=renderWork();
   else if(page==='studio')  app.innerHTML=renderStudio();
+  else if(page==='lab')     app.innerHTML=renderLab();
   else if(page==='contact') app.innerHTML=renderContact();
   else if(page==='project') app.innerHTML=renderProject(projId);
   else app.innerHTML=renderHome();
