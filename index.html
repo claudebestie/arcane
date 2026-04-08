@@ -307,6 +307,61 @@
       transform: translateY(0);
     }
 
+    .project-showcase {
+      padding: 0 0 5.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .project-panel {
+      border: 1px solid var(--line-strong);
+      background: #0f0f0f;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .project-media {
+      min-height: 280px;
+      border-right: 1px solid var(--line-strong);
+      background: #101010;
+    }
+
+    .project-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(18%) contrast(1.08) brightness(0.78);
+    }
+
+    .project-copy {
+      padding: 1.1rem 1rem;
+      display: grid;
+      align-content: center;
+      gap: 0.6rem;
+    }
+
+    .project-copy h3 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 0.9;
+    }
+
+    .project-copy p {
+      color: #8b8b8b;
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 54ch;
+    }
+
+    .project-note {
+      color: var(--accent);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
     .manifesto {
       padding: 5rem 0 6rem;
       display: grid;
@@ -547,6 +602,15 @@
         grid-template-columns: 1fr;
       }
 
+      .project-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .project-media {
+        border-right: 0;
+        border-bottom: 1px solid var(--line-strong);
+      }
+
       .section-title {
         margin-bottom: 1.2rem;
       }
@@ -613,22 +677,57 @@
     <section class="work" id="work">
       <h2 class="section-title">SELECTED WORK</h2>
       <div class="work-grid">
-        <article class="work-card hoverable" data-link="https://getmizra.com">
+        <article class="work-card hoverable" data-link="#spotlight-mizra">
           <h3 class="work-name">Mizra</h3>
           <span class="tag">Web Agency &#183; Israel</span>
-          <div class="work-overlay">View &#8594;</div>
+          <div class="work-overlay">Explore &#8595;</div>
         </article>
-        <article class="work-card hoverable" data-link="https://lancio.fr">
+        <article class="work-card hoverable" data-link="#spotlight-lancio">
           <h3 class="work-name">Lancio</h3>
           <span class="tag">Web Agency &#183; France</span>
-          <div class="work-overlay">View &#8594;</div>
+          <div class="work-overlay">Explore &#8595;</div>
         </article>
-        <article class="work-card hoverable" data-link="#contact">
+        <article class="work-card hoverable" data-link="#spotlight-ryvdoll">
           <h3 class="work-name">Ryvdoll</h3>
           <span class="tag">E-commerce &#183; Fashion</span>
-          <div class="work-overlay">View &#8594;</div>
+          <div class="work-overlay">Explore &#8595;</div>
         </article>
       </div>
+    </section>
+
+    <section class="project-showcase" id="projects">
+      <article class="project-panel" id="spotlight-mizra">
+        <div class="project-media">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80" alt="Mizra project visual" loading="lazy" />
+        </div>
+        <div class="project-copy">
+          <span class="project-note">Project spotlight</span>
+          <h3>Mizra</h3>
+          <p>Positioning-driven agency website built for conversion. We designed a sharp narrative flow, clear offer architecture, and automation-ready lead capture to support fast outbound growth in Israel.</p>
+        </div>
+      </article>
+
+      <article class="project-panel" id="spotlight-lancio">
+        <div class="project-media">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80" alt="Lancio project visual" loading="lazy" />
+        </div>
+        <div class="project-copy">
+          <span class="project-note">Project spotlight</span>
+          <h3>Lancio</h3>
+          <p>French market web agency platform focused on credibility and speed. We crafted a modular structure for rapid service page deployment, localized messaging, and scalable inbound acquisition.</p>
+        </div>
+      </article>
+
+      <article class="project-panel" id="spotlight-ryvdoll">
+        <div class="project-media">
+          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1400&q=80" alt="Ryvdoll project visual" loading="lazy" />
+        </div>
+        <div class="project-copy">
+          <span class="project-note">Project spotlight</span>
+          <h3>Ryvdoll</h3>
+          <p>Custom newsletter studio replacing SaaS lock-in. Drag-and-drop composition, subscriber segmentation, and direct SMTP sending gave the brand full ownership over design, data, and deliverability.</p>
+        </div>
+      </article>
     </section>
 
     <section class="manifesto" id="manifesto">
@@ -678,7 +777,7 @@
         <div class="contact-line">Let's build</div>
         <div class="contact-line stroke">something real.</div>
         <div class="contact-actions">
-          <a href="mailto:hello@arcanestudio.dev" class="btn-fill hoverable">Book a call</a>
+          <a href="https://calendly.com/hello-beyitworld/30-minutes-meeting" target="_blank" rel="noopener noreferrer" class="btn-fill hoverable">Book a call</a>
           <a href="#hero" class="btn-ghost hoverable">See pricing &#8594;</a>
         </div>
         <div class="contact-meta">getmizra.com (IL) &#183; lancio.fr (FR)</div>
@@ -867,6 +966,18 @@
         scrollTrigger: {
           trigger: ".work-grid",
           start: "top 80%"
+        }
+      });
+
+      gsap.from(".project-panel", {
+        y: 35,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".project-showcase",
+          start: "top 84%"
         }
       });
 
