@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ryvdoll Newsletter Studio — Arcane Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-alt: #0f0f0f;
+      --bg-deep: #080808;
+      --surface: #111;
+      --line: #1a1a1a;
+      --line-2: #1e1e1e;
+      --text: #fff;
+      --muted: #888;
+      --soft: #555;
+      --fade: #444;
+      --accent: #c8ff00;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Space Grotesk", sans-serif;
+      width: 100%;
+      min-height: 100%;
+      cursor: none;
+    }
+    body { overflow-x: hidden; opacity: 0; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1200px, 92vw); margin-inline: auto; }
+    .label {
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .headline {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(2.6rem, 8vw, 4rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .mesh-fallback {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(200,255,0,.04), transparent 35%),
+        radial-gradient(circle at 70% 70%, rgba(200,255,0,.04), transparent 40%);
+    }
+    #heroCanvas, #ctaCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      display: block;
+      pointer-events: none;
+    }
+    #ctaCanvas { opacity: 0; z-index: -2; }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 5rem 0 2rem;
+      position: relative;
+    }
+    .back-link {
+      position: absolute;
+      left: 4vw;
+      top: 1.2rem;
+      color: var(--fade);
+      font-size: 12px;
+      transition: color .25s ease;
+    }
+    .back-link:hover { color: var(--accent); }
+    .pill {
+      display: inline-flex;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 11px;
+      padding: .35rem .65rem;
+      margin-bottom: 1.1rem;
+    }
+    .hero-title {
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: .84;
+      font-size: clamp(4.5rem, 14vw, 13rem);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .hero-title.stroke {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--accent);
+    }
+    .hero-sub {
+      margin-top: 1.2rem;
+      color: var(--muted);
+      max-width: 72ch;
+      font-size: clamp(.95rem, 1.5vw, 1rem);
+      line-height: 1.7;
+    }
+
+    .pain {
+      width: 100%;
+      background: var(--bg-alt);
+      padding: 120px 0;
+    }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: 40% 60%;
+      gap: 2rem;
+    }
+    .pain-body { color: #777; line-height: 1.9; font-size: 16px; }
+    .pain-cards { display: grid; gap: .85rem; }
+    .pain-card {
+      background: #141414;
+      border-left: 3px solid var(--accent);
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: .75rem;
+    }
+    .pain-card svg { width: 20px; height: 20px; color: var(--accent); margin-top: 2px; }
+    .pain-card h4 { font-size: 14px; margin-bottom: .35rem; }
+    .pain-card p { color: var(--soft); font-size: 13px; line-height: 1.7; }
+
+    .approach { padding: 120px 0; }
+    .timeline {
+      margin-top: 1rem;
+      border-left: 1px solid var(--line-2);
+      padding-left: 1.2rem;
+      display: grid;
+      gap: 1.1rem;
+    }
+    .step {
+      position: relative;
+      padding: .4rem 0 .6rem;
+    }
+    .step::before {
+      content: "";
+      position: absolute;
+      left: -1.58rem;
+      top: .85rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .step h4 { font-size: 1.05rem; margin-bottom: .45rem; }
+    .step p { color: #777; line-height: 1.8; font-size: 15px; max-width: 74ch; }
+
+    .product {
+      width: 100%;
+      background: var(--bg-deep);
+      min-height: 100vh;
+      padding: 80px 0;
+    }
+    .product-wrap { position: relative; }
+    .studio-frame {
+      margin-top: 1rem;
+      width: min(1050px, 92vw);
+      height: min(62vh, 620px);
+      border: 1px solid var(--line-2);
+      border-radius: 8px;
+      box-shadow: 0 25px 60px rgba(0,0,0,.45);
+      background: #0d0d0d;
+      overflow: hidden;
+      opacity: 0;
+      margin-inline: auto;
+      position: relative;
+    }
+    .studio-topbar {
+      border-bottom: 1px solid var(--line-2);
+      padding: .65rem .8rem;
+      display: flex;
+      gap: .4rem;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #2b2b2b; }
+    .studio-main {
+      display: grid;
+      grid-template-columns: 34% 66%;
+      height: calc(100% - 38px);
+    }
+    .palette { border-right: 1px solid var(--line-2); padding: .8rem; display: grid; gap: .6rem; align-content: start; }
+    .drag-block {
+      border: 1px solid #272727;
+      background: #131313;
+      color: #8c8c8c;
+      font-size: 12px;
+      padding: .6rem;
+    }
+    .preview {
+      padding: .8rem;
+      display: grid;
+      align-content: start;
+      gap: .6rem;
+    }
+    .subject {
+      border: 1px solid var(--line-2);
+      padding: .6rem .7rem;
+      color: #9a9a9a;
+      font-size: 12px;
+      min-height: 34px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .canvas-drop {
+      border: 1px solid #2d2d2d;
+      background: #111;
+      color: #9f9f9f;
+      padding: .65rem;
+      font-size: 12px;
+      min-height: 38px;
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    .send-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: .5rem;
+    }
+    .send-btn {
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: .45rem .8rem;
+      background: transparent;
+      font-size: 11px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    .delivery {
+      font-size: 13px;
+      color: var(--accent);
+      opacity: 0;
+    }
+    #burstCanvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .stack {
+      width: 100%;
+      background: var(--bg-alt);
+      padding: 100px 0;
+    }
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .9rem;
+      margin-top: 1rem;
+    }
+    .tech-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 1.5rem;
+      transition: border-color .3s ease;
+    }
+    .tech-icon { width: 32px; height: 32px; color: #9ebf2e; margin-bottom: .85rem; transition: color .3s ease; }
+    .tech-card:hover { border-color: var(--accent); }
+    .tech-card:hover .tech-icon { color: var(--accent); }
+    .tech-name { font-size: 15px; margin-bottom: .45rem; }
+    .tech-role { font-size: 13px; color: var(--soft); line-height: 1.7; }
+
+    .results { padding: 120px 0; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: .9rem;
+      margin: 1rem 0 1.2rem;
+    }
+    .stat-box {
+      border: 1px solid var(--line);
+      background: #0d0d0d;
+      padding: .7rem .9rem .9rem;
+    }
+    .stat-num {
+      font-family: "Barlow Condensed", sans-serif;
+      color: var(--accent);
+      line-height: .85;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+    }
+    .stat-label { color: var(--soft); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+    .quote {
+      border-left: 3px solid var(--accent);
+      padding-left: 24px;
+      margin-top: .6rem;
+    }
+    .quote p { font-style: italic; color: #aaa; line-height: 1.8; font-size: 18px; }
+    .quote small { color: #444; font-size: 11px; margin-top: .5rem; display: inline-block; letter-spacing: .07em; }
+
+    .nda {
+      text-align: center;
+      color: #333;
+      font-size: 13px;
+      padding: 1rem 0 2.5rem;
+    }
+
+    .next {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      position: relative;
+    }
+    .next-kicker { color: var(--soft); font-size: 14px; margin-bottom: .4rem; }
+    .next-title {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(5rem, 12vw, 12rem);
+      line-height: .85;
+      margin-bottom: .4rem;
+      white-space: nowrap;
+    }
+    .next-meta { color: var(--muted); font-size: 16px; margin-bottom: 1.1rem; }
+    .ghost-btn {
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+      padding: .75rem 1.1rem;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      transition: all .3s ease;
+      display: inline-block;
+    }
+    .ghost-btn:hover { background: var(--accent); color: var(--bg); }
+
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      left: 0; top: 0;
+      pointer-events: none;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+    }
+    .cursor-dot { width: 8px; height: 8px; background: var(--accent); transition: transform .2s ease; }
+    .cursor-ring { width: 32px; height: 32px; border: 1px solid var(--accent); opacity: .4; transition: transform .25s ease, opacity .25s ease; }
+    .cursor-ring.active { transform: translate(-50%, -50%) scale(2); opacity: .75; }
+    .cursor-dot.hide { transform: translate(-50%, -50%) scale(0); }
+
+    @media (max-width: 900px) {
+      html, body { cursor: auto; }
+      .cursor-dot, .cursor-ring, #heroCanvas, #ctaCanvas { display: none !important; }
+      .mesh-fallback { opacity: 1; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .stack-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .hero-title, .next-title { white-space: normal; }
+      .studio-main { grid-template-columns: 1fr; }
+      .palette { border-right: 0; border-bottom: 1px solid var(--line-2); }
+    }
+  </style>
+</head>
+<body>
+  <div class="mesh-fallback"></div>
+  <canvas id="heroCanvas"></canvas>
+  <canvas id="ctaCanvas"></canvas>
+
+  <section class="hero container" id="hero">
+    <a class="back-link hoverable" href="/">&larr; Arcane Studio</a>
+    <div>
+      <div class="pill">E-commerce · Newsletter · France</div>
+      <h1 class="hero-title" id="heroA">Ryvdoll</h1>
+      <h2 class="hero-title stroke" id="heroB">Newsletter Studio</h2>
+      <p class="hero-sub">A custom drag-and-drop email builder, built from scratch for a French magnetic fashion doll brand.</p>
+    </div>
+  </section>
+
+  <section class="pain">
+    <div class="container pain-grid">
+      <div>
+        <p class="label">01 — Problem</p>
+        <h2 class="headline">Mailchimp was costing more than it was worth.</h2>
+        <p class="pain-body">Ryvdoll needed full control over their email identity — custom blocks, branded layouts, subscriber segmentation. Off-the-shelf tools imposed limitations and growing costs with no flexibility for a boutique brand with a precise aesthetic vision.</p>
+      </div>
+      <div class="pain-cards">
+        <article class="pain-card">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 11V8a5 5 0 0110 0v3m-10 0h10v8H7v-8z" stroke="currentColor" stroke-width="1.5"/></svg>
+          <div><h4>No design control</h4><p>Mailchimp templates couldn't match Ryvdoll's visual identity.</p></div>
+        </article>
+        <article class="pain-card">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M8 8h5a3 3 0 010 6H11a3 3 0 100 6h5" stroke="currentColor" stroke-width="1.5"/></svg>
+          <div><h4>Escalating costs</h4><p>Pricing scaled with subscribers, not with value delivered.</p></div>
+        </article>
+        <article class="pain-card">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v6H4V5zm0 8h7v6H4v-6zm9 0h7v6h-7v-6z" stroke="currentColor" stroke-width="1.5"/></svg>
+          <div><h4>Zero ownership</h4><p>Data, templates, and logic locked inside a third-party platform.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="approach container">
+    <p class="label">02 — Approach</p>
+    <h2 class="headline">Built to own. Built to last.</h2>
+    <div class="timeline">
+      <article class="step"><h4>Audit &amp; Architecture</h4><p>Mapped Ryvdoll's full email workflow. Defined block types, template logic, and subscriber data structure before writing a single line of code.</p></article>
+      <article class="step"><h4>Drag-and-Drop Engine</h4><p>Built a custom block editor in vanilla JS — text, image, button, divider, and spacer blocks, all reorderable, all editable inline.</p></article>
+      <article class="step"><h4>Template System &amp; Preview</h4><p>Live HTML preview rendering as you build. Save templates, reload them, iterate without friction.</p></article>
+      <article class="step"><h4>Subscriber Management + SMTP</h4><p>Full subscriber list with import/export, segmentation by tag, and direct send via Google Workspace SMTP — no third party in the critical path.</p></article>
+    </div>
+  </section>
+
+  <section class="product" id="product">
+    <div class="container product-wrap">
+      <p class="label">03 — Product</p>
+      <h2 class="headline" style="font-size: clamp(2.8rem, 9vw, 5rem);">The studio, in motion.</h2>
+      <div class="studio-frame" id="studioFrame">
+        <canvas id="burstCanvas"></canvas>
+        <div class="studio-topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="studio-main">
+          <div class="palette">
+            <div class="drag-block">Header image block</div>
+            <div class="drag-block">Text block</div>
+            <div class="drag-block">Button block</div>
+            <div class="drag-block">Divider block</div>
+            <div class="drag-block">Footer block</div>
+          </div>
+          <div class="preview">
+            <div class="subject" id="subjectLine"></div>
+            <div class="canvas-drop">Header image block</div>
+            <div class="canvas-drop">Text block</div>
+            <div class="canvas-drop">Button block</div>
+            <div class="canvas-drop">Divider block</div>
+            <div class="canvas-drop">Footer block</div>
+            <div class="send-row">
+              <button class="send-btn" id="sendBtn">Send</button>
+              <div class="delivery" id="delivery">847 subscribers · Delivered ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <div class="container">
+      <p class="label">04 — Stack</p>
+      <h2 class="headline" style="font-size: clamp(2.3rem, 7vw, 3.5rem);">Every tool chosen with intent.</h2>
+      <div class="stack-grid">
+        <article class="tech-card"><svg class="tech-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21 4 16.5v-9L12 3z" stroke="currentColor" stroke-width="1.5"/></svg><h4 class="tech-name">Node.js</h4><p class="tech-role">Server runtime & API layer</p></article>
+        <article class="tech-card"><svg class="tech-icon" viewBox="0 0 24 24" fill="none"><path d="M4 8l8-4 8 4-8 4-8-4zm0 4l8 4 8-4M4 16l8 4 8-4" stroke="currentColor" stroke-width="1.5"/></svg><h4 class="tech-name">Railway</h4><p class="tech-role">Zero-config cloud deployment</p></article>
+        <article class="tech-card"><svg class="tech-icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v10H4V7zm3 3l5 3 5-3" stroke="currentColor" stroke-width="1.5"/></svg><h4 class="tech-name">Google Workspace SMTP</h4><p class="tech-role">Reliable email delivery, no third-party dependency</p></article>
+        <article class="tech-card"><svg class="tech-icon" viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5V5zm4 0v14m-4-4h14" stroke="currentColor" stroke-width="1.5"/></svg><h4 class="tech-name">Vanilla JS</h4><p class="tech-role">Drag-and-drop engine, zero framework overhead</p></article>
+        <article class="tech-card"><svg class="tech-icon" viewBox="0 0 24 24" fill="none"><path d="M12 4c4.5 0 8 1.8 8 4s-3.5 4-8 4-8-1.8-8-4 3.5-4 8-4zm-8 8c0 2.2 3.5 4 8 4s8-1.8 8-4m-16 4c0 2.2 3.5 4 8 4s8-1.8 8-4" stroke="currentColor" stroke-width="1.5"/></svg><h4 class="tech-name">Supabase</h4><p class="tech-role">Subscriber storage & segmentation</p></article>
+        <article class="tech-card"><svg class="tech-icon" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4V5zm3 3h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="1.5"/></svg><h4 class="tech-name">HTML Email renderer</h4><p class="tech-role">Live preview with inline CSS compilation</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="results container">
+    <p class="label">05 — Results</p>
+    <h2 class="headline">Numbers that matter.</h2>
+    <div class="stats">
+      <article class="stat-box"><div class="stat-num" data-target="100" data-suffix="%">0</div><p class="stat-label">Delivery rate</p></article>
+      <article class="stat-box"><div class="stat-num" data-target="0" data-prefix="€" data-suffix="/mo">0</div><p class="stat-label">Platform cost</p></article>
+      <article class="stat-box"><div class="stat-num" data-target="847">0</div><p class="stat-label">Subscribers managed</p></article>
+      <article class="stat-box"><div class="stat-num" data-target="6" data-suffix="h">0</div><p class="stat-label">Build time, start to finish</p></article>
+    </div>
+    <blockquote class="quote">
+      <p>"Full ownership. Full control. The studio runs on Railway, the data lives in Supabase, and not a single euro goes to Mailchimp."</p>
+      <small>— Arcane Studio, 2026</small>
+    </blockquote>
+  </section>
+
+  <section class="nda">
+    Other projects from this client are covered by NDA.
+  </section>
+
+  <section class="next container" id="next">
+    <div>
+      <p class="next-kicker">Next:</p>
+      <h2 class="next-title hoverable" id="mizraTitle">Mizra</h2>
+      <p class="next-meta">Web Agency · Israel</p>
+      <a class="ghost-btn hoverable" href="/">View case study →</a>
+    </div>
+  </section>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script>
+  <script>
+    const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+    if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
+
+    let lenis = null;
+    if (typeof Lenis !== "undefined") {
+      lenis = new Lenis({ duration: 1.2, lerp: 0.1, smoothWheel: true });
+      function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+      if (hasGSAP) lenis.on("scroll", ScrollTrigger.update);
+    }
+
+    function setupCursor() {
+      if (isMobile || window.matchMedia("(pointer: coarse)").matches) return;
+      const dot = document.querySelector(".cursor-dot");
+      const ring = document.querySelector(".cursor-ring");
+      const c = { x: innerWidth / 2, y: innerHeight / 2 };
+      const r = { x: c.x, y: c.y };
+      addEventListener("mousemove", (e) => {
+        c.x = e.clientX; c.y = e.clientY;
+        dot.style.left = c.x + "px"; dot.style.top = c.y + "px";
+      });
+      (function loop() {
+        r.x += (c.x - r.x) * 0.12; r.y += (c.y - r.y) * 0.12;
+        ring.style.left = r.x + "px"; ring.style.top = r.y + "px";
+        requestAnimationFrame(loop);
+      })();
+      document.querySelectorAll(".hoverable,a,button").forEach((el) => {
+        el.addEventListener("mouseenter", () => { ring.classList.add("active"); dot.classList.add("hide"); });
+        el.addEventListener("mouseleave", () => { ring.classList.remove("active"); dot.classList.remove("hide"); });
+      });
+    }
+
+    function setupHeroParticles() {
+      if (isMobile || typeof THREE === "undefined") return null;
+      const canvas = document.getElementById("heroCanvas");
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(65, innerWidth / innerHeight, 0.1, 100);
+      camera.position.z = 3;
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      const geo = new THREE.BufferGeometry();
+      const positions = new Float32Array(1500 * 3);
+      const velocity = new Float32Array(1500);
+      for (let i = 0; i < 1500; i++) {
+        const k = i * 3;
+        positions[k] = (Math.random() - 0.5) * 8;
+        positions[k + 1] = (Math.random() - 0.5) * 8;
+        positions[k + 2] = (Math.random() - 0.5) * 8;
+        velocity[i] = Math.random() * 0.002 + 0.001;
+      }
+      geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xc8ff00, size: 0.014, transparent: true, opacity: 0.06, depthWrite: false });
+      const points = new THREE.Points(geo, mat);
+      scene.add(points);
+      let boost = 0;
+      if (hasGSAP) {
+        ScrollTrigger.create({
+          trigger: "#hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          onUpdate: (s) => { boost = Math.min(Math.abs(s.getVelocity()) * 0.000004, 0.06); }
+        });
+      }
+      function render() {
+        points.rotation.y += 0.0006 + boost;
+        const p = points.geometry.attributes.position.array;
+        for (let i = 0; i < p.length; i += 3) {
+          const idx = i / 3;
+          const ang = Math.atan2(p[i + 1], p[i]) + velocity[idx] * (1 + boost * 120);
+          const radius = Math.sqrt(p[i] * p[i] + p[i + 1] * p[i + 1]) * (1 + boost * 0.2);
+          p[i] = Math.cos(ang) * radius;
+          p[i + 1] = Math.sin(ang) * radius;
+        }
+        points.geometry.attributes.position.needsUpdate = true;
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+      }
+      render();
+      addEventListener("resize", () => {
+        camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight);
+      });
+      return { scene, camera, renderer };
+    }
+
+    function setupCtaParticles() {
+      if (isMobile || typeof THREE === "undefined") return;
+      const canvas = document.getElementById("ctaCanvas");
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(65, innerWidth / innerHeight, 0.1, 100);
+      camera.position.z = 3;
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      const geo = new THREE.BufferGeometry();
+      const positions = new Float32Array(1100 * 3);
+      for (let i = 0; i < 1100; i++) {
+        const k = i * 3;
+        positions[k] = (Math.random() - 0.5) * 8;
+        positions[k + 1] = (Math.random() - 0.5) * 8;
+        positions[k + 2] = (Math.random() - 0.5) * 8;
+      }
+      geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xc8ff00, size: 0.013, transparent: true, opacity: 0.05, depthWrite: false });
+      const points = new THREE.Points(geo, mat);
+      scene.add(points);
+      function render() {
+        points.rotation.y += 0.00045;
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+      }
+      render();
+      if (hasGSAP) {
+        gsap.to("#ctaCanvas", {
+          opacity: 1,
+          scrollTrigger: { trigger: "#next", start: "top 80%", end: "top 25%", scrub: true }
+        });
+      }
+      addEventListener("resize", () => {
+        camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight);
+      });
+    }
+
+    function setupAnimations() {
+      if (!hasGSAP) return;
+      gsap.to("body", { opacity: 1, duration: 0.6, ease: "power1.out" });
+      gsap.to("#heroA", { x: -180, opacity: 0, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to("#heroB", { x: 180, opacity: 0, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.from(".pain-card", { y: 40, opacity: 0, stagger: 0.2, duration: .8, ease: "power2.out", scrollTrigger: { trigger: ".pain-cards", start: "top 78%" } });
+      gsap.from(".step", { y: 24, opacity: 0, stagger: 0.3, duration: .7, ease: "power2.out", scrollTrigger: { trigger: ".timeline", start: "top 82%", once: true } });
+      gsap.from(".tech-card", { opacity: 0, y: 20, stagger: 0.1, duration: .6, ease: "power2.out", scrollTrigger: { trigger: ".stack-grid", start: "top 80%" } });
+
+      const frameTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#product",
+          start: "top top",
+          end: "+=250%",
+          scrub: 1.5,
+          pin: true
+        }
+      });
+      frameTl.to("#studioFrame", { opacity: 1, duration: 0.2 });
+      document.querySelectorAll(".canvas-drop").forEach((el, i) => {
+        frameTl.to(el, { opacity: 1, x: 0, duration: .28, ease: "back.out(1.2)" }, 0.15 + i * 0.15)
+          .to(el, { borderColor: "#c8ff00", duration: .08 }, "<")
+          .to(el, { borderColor: "#2d2d2d", duration: .2 }, ">");
+      });
+      const fullText = "✨ Nouvelle collection — Les Ryvdolls de Printemps";
+      const state = { n: 0 };
+      frameTl.to(state, {
+        n: fullText.length,
+        duration: .85,
+        ease: "none",
+        onUpdate: () => { document.getElementById("subjectLine").textContent = fullText.slice(0, Math.round(state.n)); }
+      }, 1.15);
+      frameTl.to("#sendBtn", { boxShadow: "0 0 0 10px rgba(200,255,0,0.0), 0 0 35px rgba(200,255,0,.35)", repeat: 2, yoyo: true, duration: .22 }, 2.05);
+      frameTl.to("#delivery", { opacity: 1, duration: .3 }, 2.15);
+
+      document.querySelectorAll(".stat-num").forEach((el) => {
+        const target = Number(el.dataset.target || 0);
+        const suffix = el.dataset.suffix || "";
+        const prefix = el.dataset.prefix || "";
+        gsap.fromTo(el, { innerText: 0 }, {
+          innerText: target,
+          duration: 1.1,
+          snap: { innerText: 1 },
+          ease: "power2.out",
+          onUpdate: function () { el.textContent = prefix + Math.round(this.targets()[0].innerText) + suffix; },
+          scrollTrigger: { trigger: el, start: "top 85%", once: true }
+        });
+      });
+
+      const mizra = document.getElementById("mizraTitle");
+      const letters = mizra.textContent.split("");
+      mizra.innerHTML = letters.map((c) => `<span style="display:inline-block">${c}</span>`).join("");
+      mizra.addEventListener("mouseenter", () => gsap.to("#mizraTitle span", { x: "random(-15,15)", y: "random(-6,6)", rotate: "random(-7,7)", duration: .28, stagger: 0.02 }));
+      mizra.addEventListener("mouseleave", () => gsap.to("#mizraTitle span", { x: 0, y: 0, rotate: 0, duration: .34, stagger: 0.015 }));
+    }
+
+    function setupBurst() {
+      if (isMobile || typeof THREE === "undefined") return;
+      const canvas = document.getElementById("burstCanvas");
+      const frame = document.getElementById("studioFrame");
+      const btn = document.getElementById("sendBtn");
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      camera.position.z = 1;
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+      const resize = () => renderer.setSize(frame.clientWidth, frame.clientHeight);
+      resize();
+      addEventListener("resize", resize);
+
+      const count = 200;
+      const geo = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3);
+      const velocity = [];
+      for (let i = 0; i < count; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const s = Math.random() * 0.01 + 0.004;
+        velocity.push({ x: Math.cos(a) * s, y: Math.sin(a) * s, life: 0 });
+      }
+      geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xc8ff00, size: 0.01, transparent: true, opacity: 0 });
+      const points = new THREE.Points(geo, mat);
+      scene.add(points);
+      let blasting = false;
+
+      function triggerBurst() {
+        const rF = frame.getBoundingClientRect();
+        const rB = btn.getBoundingClientRect();
+        const cx = ((rB.left + rB.width / 2 - rF.left) / rF.width) * 2 - 1;
+        const cy = -(((rB.top + rB.height / 2 - rF.top) / rF.height) * 2 - 1);
+        const p = points.geometry.attributes.position.array;
+        for (let i = 0; i < count; i++) {
+          const k = i * 3;
+          p[k] = cx; p[k + 1] = cy; p[k + 2] = 0;
+          velocity[i].life = Math.random() * 1.2;
+        }
+        points.geometry.attributes.position.needsUpdate = true;
+        mat.opacity = 1;
+        blasting = true;
+      }
+
+      function render() {
+        if (blasting) {
+          const p = points.geometry.attributes.position.array;
+          let alive = false;
+          for (let i = 0; i < count; i++) {
+            const k = i * 3;
+            const v = velocity[i];
+            if (v.life > 0) {
+              p[k] += v.x; p[k + 1] += v.y; v.life -= 0.02; alive = true;
+            }
+          }
+          mat.opacity *= 0.96;
+          points.geometry.attributes.position.needsUpdate = true;
+          if (!alive || mat.opacity < 0.02) { blasting = false; mat.opacity = 0; }
+        }
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+      }
+      render();
+
+      if (hasGSAP) {
+        ScrollTrigger.create({
+          trigger: "#product",
+          start: "top top",
+          end: "+=250%",
+          scrub: 1.5,
+          onUpdate: (self) => {
+            if (self.progress > 0.8 && !frame.dataset.burst) {
+              frame.dataset.burst = "1";
+              triggerBurst();
+            }
+            if (self.progress < 0.6) frame.dataset.burst = "";
+          }
+        });
+      }
+    }
+
+    if (!hasGSAP) document.body.style.opacity = "1";
+    setupCursor();
+    setupHeroParticles();
+    setupCtaParticles();
+    setupAnimations();
+    setupBurst();
+  </script>
+</body>
+</html>
