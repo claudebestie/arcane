@@ -692,9 +692,12 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script>
   <script>
-    gsap.registerPlugin(ScrollTrigger);
+    const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+    if (hasGSAP) {
+      gsap.registerPlugin(ScrollTrigger);
+    }
 
     const isMobile = window.matchMedia("(max-width: 900px)").matches;
     let bgScene, bgRenderer, bgCamera, bgParticles, bgPositions;
@@ -704,21 +707,26 @@
     const mouseTarget = { x: 0, y: 0 };
     const mouseLerp = { x: 0, y: 0 };
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.2,
-      lerp: 0.1
-    });
+    let lenis = null;
+    if (typeof Lenis !== "undefined") {
+      lenis = new Lenis({
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 1.2,
+        lerp: 0.1
+      });
 
-    function raf(time) {
-      lenis.raf(time);
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
       requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
-    lenis.on("scroll", ScrollTrigger.update);
+      if (hasGSAP) {
+        lenis.on("scroll", ScrollTrigger.update);
+      }
+    }
 
     function createParticleSystem(count, spread, opacity, size = 0.015) {
       const geometry = new THREE.BufferGeometry();
@@ -814,6 +822,8 @@
     }
 
     function setupAnimations() {
+      if (!hasGSAP) return;
+
       ScrollTrigger.create({
         trigger: "#hero",
         start: "top top",
@@ -960,6 +970,13 @@
       const loaderText = document.getElementById("loaderText");
       const heroWrap = document.querySelector(".hero-wrap");
 
+      if (!hasGSAP) {
+        loader.style.display = "none";
+        heroWrap.style.opacity = "1";
+        heroWrap.style.transform = "translateY(0)";
+        return;
+      }
+
       gsap.set(heroWrap, { opacity: 0, y: 22 });
 
       const tl = gsap.timeline({
@@ -1001,11 +1018,18 @@
     setupAnimations();
     playIntro();
 
-    if (!isMobile) {
+    if (!isMobile && typeof THREE !== "undefined") {
       setupMainThree();
       setupContactThree();
       animateThree();
     }
+
+    window.setTimeout(() => {
+      const loader = document.getElementById("loader");
+      if (loader && loader.style.display !== "none") {
+        loader.style.display = "none";
+      }
+    }, 2600);
 
     window.addEventListener("resize", onResize);
   </script>
