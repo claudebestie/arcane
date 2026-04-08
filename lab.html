@@ -1,55 +1,73 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>The Lab — Arcane Studio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet"/>
-<style>:root{--bg:#0a0a0a;--ac:#c8ff00;--tx:#fff;--m:#888;--d:#555;--l:#1a1a1a}*{box-sizing:border-box;margin:0;padding:0}html,body{background:var(--bg);color:var(--tx);font-family:"Space Grotesk",sans-serif;cursor:none}body{opacity:0;overflow-x:hidden}a{text-decoration:none;color:inherit}.back{position:fixed;left:4vw;top:1rem;color:#444;font-size:12px;z-index:10}.back:hover{color:var(--ac)}#bg{position:fixed;inset:0;z-index:-3}.fallback{position:fixed;inset:0;z-index:-2;opacity:0;background:radial-gradient(circle at 20% 20%,rgba(200,255,0,.06),transparent 36%),radial-gradient(circle at 78% 75%,rgba(200,255,0,.05),transparent 40%)}.w{width:min(1180px,92vw);margin:auto}section{padding:110px 0;border-top:1px solid var(--l)}.hero{border-top:0;min-height:100vh;display:grid;align-items:center}.t{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,14vw,12rem);line-height:.82}.s{color:var(--ac);font-size:14px;margin:.4rem 0}.d{color:var(--m);font-size:17px;line-height:2;max-width:640px}.lb{color:var(--ac);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.7rem}.h{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.4rem,7vw,4rem);line-height:1;margin-bottom:.8rem}.b{color:#777;font-size:16px;line-height:1.9;white-space:pre-line}.case{border:1px solid var(--l);background:#101010;padding:1rem}.top{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:.65rem}.pill{border:1px solid var(--ac);color:var(--ac);font-size:11px;border-radius:999px;padding:.3rem .6rem}.url{border:1px solid #2a2a2a;color:#a1a1a1;font-size:11px;border-radius:999px;padding:.3rem .6rem}.anim{min-height:68vh;border:1px solid #1e1e1e;background:#080808;margin:.8rem 0 .9rem;position:relative;overflow:hidden}.term{font-family:ui-monospace,monospace;color:var(--ac);font-size:13px;white-space:pre-line;opacity:0}.bars{display:grid;gap:.35rem}.bar{height:12px;border:1px solid #2a2a2a;position:relative}.fill{height:100%;width:0;background:var(--ac);opacity:.7}.verdict{color:var(--ac);opacity:0}.next{min-height:42vh;display:grid;place-items:center;text-align:center}.next h3{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,10vw,8rem)}.btn{display:inline-block;margin-top:.8rem;border:1px solid var(--ac);color:var(--ac);padding:.72rem 1.05rem;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em}.btn:hover{background:var(--ac);color:var(--bg)}.footer{color:#333;text-align:center;font-size:13px}.cursor-dot,.cursor-ring{position:fixed;left:0;top:0;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:80}.cursor-dot{width:8px;height:8px;background:var(--ac)}.cursor-ring{width:32px;height:32px;border:1px solid var(--ac);opacity:.4}.cursor-ring.a{transform:translate(-50%,-50%) scale(2)}.cursor-dot.h{transform:translate(-50%,-50%) scale(0)}@media(max-width:900px){html,body{cursor:auto}.cursor-dot,.cursor-ring,#bg{display:none}.fallback{opacity:1}}</style>
-</head><body><a class="back" href="/">&larr; Arcane Studio</a><div class="fallback"></div><canvas id="bg"></canvas><main class="w">
-<section class="hero"><div><h1 class="t">The Lab</h1><p class="s">30 Projects · 30 Days</p><p class="d">One tool shipped every day for 30 days. Each one
-live, each one solving a real problem, each one
-built and deployed by Arcane Studio.</p><p class="d" style="margin-top:1rem">The Lab is a constraint. Finish before you post.
-Ship something real. No half-built demos, no
-mockups, no 'coming soon.' Every project in the
-Lab is a live URL that does something useful —
-for founders, developers, or anyone who needs
-a fast answer to a specific question.</p></div></section>
-<section class="case" id="p1"><div class="top"><span class="pill">Day 01 / 30</span><span class="url">grademywebsite.arcane-studio.com</span><span class="pill">Audit Tool · SEO · Performance</span></div><h2 class="h">GradeMyWebsite</h2><div class="anim" id="a1"></div><p class="b"><strong>Problem:</strong> Most founders have no idea how their site actually
-performs. PageSpeed exists but it's clinical, jargon-heavy,
-and gives you a score with no context. GradeMyWebsite
-gives you an honest audit in 10 seconds — performance,
-SEO, accessibility — with a grade that actually means
-something.
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>The Lab — Arcane</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--bg:#0a0a0a;--ac:#c8ff00;--tx:#fff;--m:#888;--d:#555;--l:#1a1a1a}*{box-sizing:border-box;margin:0;padding:0}html,body{background:var(--bg);color:var(--tx);font-family:"Space Grotesk",sans-serif;cursor:none}body{opacity:0;overflow-x:hidden}a{text-decoration:none;color:inherit}.wrap{width:min(1180px,92vw);margin:auto}#bg{position:fixed;inset:0;z-index:-3}.mesh{position:fixed;inset:0;z-index:-2;opacity:0;background:radial-gradient(circle at 20% 18%,rgba(200,255,0,.04),transparent 36%),radial-gradient(circle at 76% 72%,rgba(200,255,0,.04),transparent 40%)}
+.nav{position:fixed;inset:0 0 auto 0;z-index:40;padding:.9rem 4vw;display:flex;justify-content:space-between;align-items:center;transition:.2s}.nav.scrolled{background:#0a0a0a;border-bottom:1px solid #1a1a1a}.logo{font-family:"Barlow Condensed",sans-serif;font-size:18px}.links{display:flex;gap:1.1rem}.links a{font-size:13px;color:#888;font-weight:500}.links a:hover{color:var(--ac)}.burger{display:none;gap:4px;flex-direction:column}.burger span{width:20px;height:2px;background:var(--ac)}.mob{position:fixed;inset:0;background:#0a0a0a;z-index:45;display:grid;place-content:center;gap:1rem;transform:translateY(-100%);transition:.3s}.mob.open{transform:none}.mob a{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.4rem,12vw,4rem)}
+.back{position:fixed;left:4vw;top:3.2rem;font-size:12px;color:#444;z-index:39}.back:hover{color:var(--ac)}section{padding:105px 0;border-top:1px solid var(--l)}.hero{min-height:100vh;border-top:0;display:grid;align-items:center}.t{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,14vw,12rem);line-height:.82}.s{color:var(--ac);font-size:14px;margin:.4rem 0}.d{max-width:640px;color:#888;font-size:17px;line-height:2}
+.project{padding:90px 0}.alt{background:#0f0f0f}.day{font-size:11px;color:var(--ac);letter-spacing:.15em;text-transform:uppercase}.h{font-family:"Barlow Condensed",sans-serif;font-size:clamp(3rem,9vw,5rem);line-height:.9;margin:.35rem 0}.url{display:inline-block;border:1px solid var(--ac);color:var(--ac);border-radius:999px;padding:.35rem .65rem;font-size:13px;margin-right:.5rem}.tag{display:inline-block;border:1px solid #2a2a2a;color:#9a9a9a;border-radius:999px;padding:.35rem .65rem;font-size:12px}
+video{width:100%;border-radius:8px;border:1px solid #1e1e1e;margin:40px 0}.cols{display:grid;grid-template-columns:55% 45%;gap:1rem}.txt{color:#777;font-size:15px;line-height:1.85;white-space:pre-line}.stack{display:flex;gap:.45rem;flex-wrap:wrap}.pill{border:1px solid var(--ac);color:var(--ac);font-size:11px;border-radius:999px;padding:.28rem .58rem}.result{margin-top:.8rem;border-left:3px solid var(--ac);padding-left:.7rem;color:#aaa;line-height:1.8}
+.more{text-align:center;background:#0f0f0f}.lb{color:var(--ac);font-size:11px;letter-spacing:.15em;text-transform:uppercase}.mh{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.4rem,8vw,4rem);margin:.4rem 0}.mb{color:#888}.btn{display:inline-block;margin-top:.8rem;border:1px solid var(--ac);color:var(--ac);padding:.72rem 1.05rem;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em}.btn:hover{background:var(--ac);color:#0a0a0a}
+.next{min-height:42vh;display:grid;place-items:center;text-align:center}.next h3{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,10vw,8rem)}
+.cursor-dot,.cursor-ring{position:fixed;left:0;top:0;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:99}.cursor-dot{width:8px;height:8px;background:var(--ac)}.cursor-ring{width:32px;height:32px;border:1px solid var(--ac);opacity:.4}.cursor-ring.a{transform:translate(-50%,-50%) scale(2)}.cursor-dot.h{transform:translate(-50%,-50%) scale(0)}
+@media(max-width:900px){html,body{cursor:auto}.links,.cursor-dot,.cursor-ring,#bg{display:none}.mesh{opacity:1}.burger{display:flex}.cols{grid-template-columns:1fr}.back{top:3rem}}
+</style></head><body><div class="mesh"></div><canvas id="bg"></canvas><header class="nav" id="nav"><a class="logo" href="/index.html">ARCANE</a><nav class="links"><a href="/index.html">Home</a><a href="/index.html#work">Work</a><a href="/lab.html">Lab</a><a href="/index.html#contact">Contact</a></nav><button id="burger" class="burger"><span></span><span></span><span></span></button></header><nav class="mob" id="mob"><a href="/index.html">Home</a><a href="/index.html#work">Work</a><a href="/lab.html">Lab</a><a href="/index.html#contact">Contact</a></nav><a class="back" href="/index.html">← Arcane Studio</a>
+<main class="wrap"><section class="hero"><div><h1 class="t">The Lab</h1><p class="s">30 Projects · 30 Days</p><p class="d">One tool shipped every day for 30 days.
+Each one live. Each one solving a real problem.</p><p class="d" style="margin-top:1rem">The Lab is a constraint. Finish before you post.
+Ship something real. No half-built demos, no mockups,
+no 'coming soon.' Every project is a live URL that
+does something useful — for founders, developers,
+or anyone who needs a fast answer to a specific
+question.</p></div></section>
 
-<strong>How it works:</strong>
-1. Paste any URL — No account, no signup, no friction.
-2. 10-second audit — Pulls real performance data.
-3. Actionable output — A grade with context.
+<section class="project"><p class="day">Day 01 / 30</p><h2 class="h">GradeMyWebsite</h2><a class="url" href="https://grademywebsite.arcane-studio.com" target="_blank" rel="noopener noreferrer">grademywebsite.arcane-studio.com</a><span class="tag">Audit Tool · SEO · Performance</span><video src="./videos/grademywebsite-final.mp4" autoplay loop muted playsinline></video><div class="cols"><div class="txt"><strong>Problem</strong>
+Most founders have no idea how their site actually
+performs. PageSpeed exists but it's clinical and
+jargon-heavy. GradeMyWebsite gives you an honest
+audit in 10 seconds — performance, SEO, accessibility
+— with a grade that actually means something and a
+direct path to fixing what's broken.
 
-<strong>Tech:</strong> Vanilla JS frontend, Lighthouse API, Netlify deployment, CTA feeds Arcane lead pipeline.
-<strong>Result:</strong> Live on day 1. Used to grade arcane-studio.com itself before launch.</p></section>
-<section class="case" id="p2"><div class="top"><span class="pill">Day 02 / 30</span><span class="url">startup-or-feature.arcane-studio.com</span><span class="pill">AI Tool · Founder · Idea Validation</span></div><h2 class="h">Startup or Feature?</h2><div class="anim" id="a2"><div style="padding:1rem"><div id="typed" style="font-family:ui-monospace,monospace;color:#a5a5a5;min-height:22px"></div><div class="bars" style="margin-top:.7rem"><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div><div class="bar"><div class="fill"></div></div></div><p class="verdict" style="margin-top:.7rem">Feature, not a startup.</p></div></div><p class="b"><strong>Problem:</strong> Most startup ideas are features in disguise.
+<strong>How it works</strong>
+1. Paste any URL — no account, no signup, no friction
+2. 10-second audit — load speed, SEO signals,
+accessibility score, mobile readiness
+3. Grade + context — not just a number, a actionable
+output with a direct CTA to fix it</div><div><div class="stack"><span class="pill">Vanilla JS</span><span class="pill">Lighthouse API</span><span class="pill">Netlify</span></div><p class="result">Day 1. Live. Used to grade arcane-studio.com before launch.</p></div></div></section>
 
-<strong>How it works:</strong>
-1. Describe your idea in one paragraph.
-2. 8-criteria scoring.
-3. Verdict + downloadable scorecard.
+<section class="project alt"><div class="wrap"><p class="day">Day 02 / 30</p><h2 class="h">Startup or Feature?</h2><a class="url" href="https://startup-or-feature.arcane-studio.com" target="_blank" rel="noopener noreferrer">startup-or-feature.arcane-studio.com</a><span class="tag">AI Tool · Idea Validation · Founder</span><video src="./videos/startup-or-feature-final.mp4" autoplay loop muted playsinline></video><div class="cols"><div class="txt"><strong>Problem</strong>
+Most startup ideas are features in disguise —
+a wrapper around an API, a niche add-on, a slightly
+better version of something that already exists.
+Founders waste months on ideas that were never
+companies. This tool scores your idea on 8 real
+criteria and tells you the truth.
 
-<strong>Tech:</strong> Claude API, structured JSON output, Vanilla JS/CSS, Railway deployment.
-<strong>Result:</strong> Launched day 2. Most shared Lab tool so far.</p></section>
-<section class="case" id="p3"><div class="top"><span class="pill">Day 03 / 30</span><span class="url">stackdetector.arcane-studio.com</span><span class="pill">Dev Tool · Tech Intelligence · Competitive Research</span></div><h2 class="h">Stack Detector</h2><div class="anim" id="a3" style="padding:1rem"><pre class="term" id="term">&gt; framework: Next.js
-&gt; analytics: Segment + Mixpanel
-&gt; hosting: Vercel
-&gt; payments: Stripe
-&gt; estimated monthly cost: $847</pre></div><p class="b"><strong>Problem:</strong> You want to know exactly what a competitor is built with.
+<strong>How it works</strong>
+1. Describe your idea — one paragraph, no deck required
+2. 8-criteria scoring — market size, defensibility,
+monetization, timing, competition, technical moat,
+distribution, founder fit
+3. Verdict + scorecard — downloadable, shareable
+on LinkedIn</div><div><div class="stack"><span class="pill">Claude API</span><span class="pill">Vanilla JS</span><span class="pill">Railway</span></div><p class="result">The most shared Lab tool. Founders use it before talking to investors.</p></div></div></div></section>
 
-<strong>How it works:</strong>
-1. Paste any URL.
-2. Full stack read.
-3. Cost estimate.
+<section class="project"><p class="day">Day 03 / 30</p><h2 class="h">Stack Detector</h2><a class="url" href="https://stackdetector.arcane-studio.com" target="_blank" rel="noopener noreferrer">stackdetector.arcane-studio.com</a><span class="tag">Dev Tool · Tech Intelligence · Competitive Research</span><video src="./videos/stackdetector-final.mp4" autoplay loop muted playsinline></video><div class="cols"><div class="txt"><strong>Problem</strong>
+You land on a competitor's site and you want to
+know exactly what it's built with. DevTools gives
+you fragments. BuiltWith gives you noise. Stack
+Detector gives you a clean read — framework,
+analytics, hosting, CDN, payments — plus an
+estimate of what it costs to run every month.
 
-<strong>Tech:</strong> Custom scraper + analysis engine, Anthropic API, terminal-style UI, Netlify deployment.
-<strong>Result:</strong> Most technically complex Lab tool, running day 3.</p></section>
-<section><p class="footer">Projects 04–30 in progress. One tool shipped per day. Follow on LinkedIn for daily updates →</p><p style="text-align:center;margin-top:.8rem"><a class="btn hoverable" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></p></section>
-<section class="next"><div><p style="color:#555;font-size:14px">Next project</p><h3>Mizra</h3><a class="btn hoverable" href="/mizra.html">Back to chain →</a></div></section></main>
-<div class="cursor-dot"></div><div class="cursor-ring"></div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script>
-<script>const m=matchMedia("(max-width:900px)").matches,g=typeof gsap!=="undefined"&&typeof ScrollTrigger!=="undefined";if(g)gsap.registerPlugin(ScrollTrigger);if(typeof Lenis!=="undefined"){const l=new Lenis({duration:1.2,lerp:.1,smoothWheel:true});requestAnimationFrame(function r(t){l.raf(t);requestAnimationFrame(r)});if(g)l.on("scroll",ScrollTrigger.update)}if(!m&&typeof THREE!=="undefined"){const c=document.getElementById("bg"),s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,100);cam.position.z=3;const rr=new THREE.WebGLRenderer({canvas:c,alpha:true});rr.setSize(innerWidth,innerHeight);const gg=new THREE.BufferGeometry(),pp=new Float32Array(1400*3);for(let i=0;i<1400;i++){const k=i*3;pp[k]=(Math.random()-.5)*8;pp[k+1]=(Math.random()-.5)*8;pp[k+2]=(Math.random()-.5)*8}gg.setAttribute("position",new THREE.BufferAttribute(pp,3));const pts=new THREE.Points(gg,new THREE.PointsMaterial({color:0xc8ff00,size:.013,opacity:.055,transparent:true,depthWrite:false}));s.add(pts);(function a(){pts.rotation.y+=.00058;rr.render(s,cam);requestAnimationFrame(a)})()}if(g){gsap.to("body",{opacity:1,duration:.6});gsap.from("section",{y:30,opacity:0,stagger:.08,duration:.5,scrollTrigger:{trigger:"main",start:"top 85%"}});const d1={n:0};gsap.timeline({scrollTrigger:{trigger:"#p1",start:"top top",end:"+=180%",pin:true,scrub:1.5}}).to(d1,{n:87,duration:1,onUpdate:()=>{document.getElementById("a1").innerHTML='<div style="padding:1rem"><div style="border:1px solid #1f1f1f;padding:.55rem;color:#9a9a9a;font-family:ui-monospace,monospace">https://example.com</div><div style="margin-top:.8rem;width:130px;height:130px;border-radius:50%;border:6px solid #1f1f1f;display:grid;place-items:center;font-family:Barlow Condensed,sans-serif;font-size:3rem;color:#c8ff00">'+Math.round(d1.n)+'</div></div>'}});const t="AI meeting notes app",s2={n:0};const tl2=gsap.timeline({scrollTrigger:{trigger:"#p2",start:"top top",end:"+=180%",pin:true,scrub:1.5}});tl2.to(s2,{n:t.length,duration:.7,onUpdate:()=>document.getElementById("typed").textContent=t.slice(0,Math.round(s2.n))});document.querySelectorAll("#a2 .fill").forEach((f,i)=>tl2.to(f,{width:[72,49,85,61,54,90,67,44][i]+"%",duration:.35},.4+i*.08));tl2.to(".verdict",{opacity:1,duration:.3},1.2);gsap.timeline({scrollTrigger:{trigger:"#p3",start:"top top",end:"+=180%",pin:true,scrub:1.5}}).to("#term",{opacity:1,duration:.4})}else document.body.style.opacity=1;if(!m&&!matchMedia("(pointer:coarse)").matches){const d=document.querySelector(".cursor-dot"),r=document.querySelector(".cursor-ring"),c={x:innerWidth/2,y:innerHeight/2},p={x:c.x,y:c.y};addEventListener("mousemove",e=>{c.x=e.clientX;c.y=e.clientY;d.style.left=c.x+"px";d.style.top=c.y+"px"});(function f(){p.x+=(c.x-p.x)*.12;p.y+=(c.y-p.y)*.12;r.style.left=p.x+"px";r.style.top=p.y+"px";requestAnimationFrame(f)})();document.querySelectorAll("a,.hoverable,button").forEach(el=>{el.onmouseenter=()=>{r.classList.add("a");d.classList.add("h")};el.onmouseleave=()=>{r.classList.remove("a");d.classList.remove("h")}})}</script>
-</body></html>
+<strong>How it works</strong>
+1. Paste any URL — no login, instant scan
+2. Full stack read — framework, analytics, hosting,
+CDN, payment provider, marketing stack
+3. Cost estimate — monthly running cost based
+on detected stack</div><div><div class="stack"><span class="pill">Custom scraper</span><span class="pill">Anthropic API</span><span class="pill">Netlify</span></div><p class="result">Most technically complex Lab tool. Used internally to audit client stacks before proposing rebuilds.</p></div></div></section>
+
+<section class="more"><p class="lb">More Coming</p><h2 class="mh">Projects 04–30 dropping daily.</h2><p class="mb">One tool per day. Follow on LinkedIn for daily updates.</p><a class="btn" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">Follow on LinkedIn →</a></section>
+<section class="next"><div><p style="color:#555;font-size:14px">Next project</p><h3>Home</h3><a class="btn" href="/index.html">Back to index →</a></div></section></main><div class="cursor-dot"></div><div class="cursor-ring"></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script><script>
+const m=matchMedia("(max-width:900px)").matches,g=window.gsap&&window.ScrollTrigger;if(g)gsap.registerPlugin(ScrollTrigger);if(window.Lenis){const l=new Lenis({duration:1.2,lerp:.1,smoothWheel:true});requestAnimationFrame(function r(t){l.raf(t);requestAnimationFrame(r)});if(g)l.on("scroll",ScrollTrigger.update)}const nav=document.getElementById("nav");if(g){ScrollTrigger.create({start:20,onUpdate:s=>nav.classList.toggle("scrolled",s.scroll()>20)});gsap.from("section",{y:25,opacity:0,stagger:.07,scrollTrigger:{trigger:"main",start:"top 85%"}})}
+if(!m&&window.THREE){const c=document.getElementById("bg"),s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,100);cam.position.z=3;const r=new THREE.WebGLRenderer({canvas:c,alpha:true});r.setSize(innerWidth,innerHeight);const gg=new THREE.BufferGeometry(),pp=new Float32Array(1400*3);for(let i=0;i<1400;i++){const k=i*3;pp[k]=(Math.random()-.5)*8;pp[k+1]=(Math.random()-.5)*8;pp[k+2]=(Math.random()-.5)*8}gg.setAttribute("position",new THREE.BufferAttribute(pp,3));const pts=new THREE.Points(gg,new THREE.PointsMaterial({color:0xc8ff00,size:.013,opacity:.055,transparent:true,depthWrite:false}));s.add(pts);(function a(){pts.rotation.y+=.00058;r.render(s,cam);requestAnimationFrame(a)})()}
+const burger=document.getElementById("burger"),mob=document.getElementById("mob");burger.onclick=()=>{mob.classList.toggle("open");if(g&&mob.classList.contains("open"))gsap.from("#mob a",{opacity:0,y:16,stagger:.08,duration:.25})};mob.querySelectorAll("a").forEach(a=>a.onclick=()=>mob.classList.remove("open"));document.body.style.opacity=1;
+if(!m&&!matchMedia("(pointer:coarse)").matches){const d=document.querySelector(".cursor-dot"),r=document.querySelector(".cursor-ring"),c={x:innerWidth/2,y:innerHeight/2},p={x:c.x,y:c.y};addEventListener("mousemove",e=>{c.x=e.clientX;c.y=e.clientY;d.style.left=c.x+"px";d.style.top=c.y+"px"});(function f(){p.x+=(c.x-p.x)*.12;p.y+=(c.y-p.y)*.12;r.style.left=p.x+"px";r.style.top=p.y+"px";requestAnimationFrame(f)})();document.querySelectorAll("a,button").forEach(el=>{el.onmouseenter=()=>{r.classList.add("a");d.classList.add("h")};el.onmouseleave=()=>{r.classList.remove("a");d.classList.remove("h")}})}
+</script></body></html>

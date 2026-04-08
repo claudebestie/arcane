@@ -1,113 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Arcane Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0a0a0a;--ac:#c8ff00;--tx:#fff;--m:#888;--d:#555;--l:#1a1a1a}
-    *{box-sizing:border-box;margin:0;padding:0} html,body{background:var(--bg);color:var(--tx);font-family:"Space Grotesk",sans-serif;cursor:none}
-    body{opacity:0;overflow-x:hidden}
-    a{text-decoration:none;color:inherit}
-    #bg{position:fixed;inset:0;z-index:-3}.fallback{position:fixed;inset:0;z-index:-2;opacity:0;background:radial-gradient(circle at 18% 20%,rgba(200,255,0,.07),transparent 36%),radial-gradient(circle at 80% 70%,rgba(200,255,0,.05),transparent 40%)}
-    .wrap{width:min(1200px,92vw);margin:auto}
-    .hero{min-height:100vh;display:grid;place-items:center;text-align:center}
-    .hero h1,.hero h2{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,18vw,17rem);line-height:.82;letter-spacing:-.02em}
-    .hero h2{-webkit-text-stroke:1px var(--ac);color:transparent}
-    .hero p{margin-top:1rem;color:var(--m);font-size:14px}
-    .cta{display:inline-block;margin-top:1.4rem;border:1px solid var(--ac);color:var(--ac);padding:.75rem 1.1rem;text-transform:uppercase;font-size:.78rem;letter-spacing:.08em;transition:.3s}
-    .cta:hover{background:var(--ac);color:var(--bg)}
-    .section{padding:100px 0;border-top:1px solid var(--l)}
-    .title{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.5rem,8vw,6rem);line-height:.9;margin-bottom:1rem}
-    .manifesto h3{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.7rem,7vw,5rem);line-height:.9;margin-bottom:1rem}
-    .manifesto .body{max-width:680px;color:var(--m);font-size:17px;line-height:2;white-space:pre-line}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-top:1.4rem}
-    .stat{border:1px solid var(--l);background:#101010;padding:.7rem}
-    .num{font-family:"Barlow Condensed",sans-serif;color:var(--ac);font-size:clamp(3.2rem,8vw,6rem);line-height:.85}
-    .lbl{font-size:12px;color:var(--d);text-transform:uppercase;letter-spacing:.08em}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
-    .card{border:1px solid #1f1f1f;background:#111;padding:1rem;aspect-ratio:4/3;position:relative;overflow:hidden;display:grid;align-content:start}
-    .card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(200,255,0,.12),transparent 45%),linear-gradient(140deg,#101010,#151515);opacity:.35}
-    .card>*{position:relative}
-    .card h4{font-family:"Barlow Condensed",sans-serif;font-size:2rem}
-    .tag{display:inline-block;margin-top:.5rem;border:1px solid var(--ac);color:var(--ac);border-radius:999px;padding:.28rem .58rem;font-size:11px}
-    .card p{margin-top:.6rem;font-size:13px;color:#7d7d7d;line-height:1.6}
-    .card:hover{border-color:var(--ac)}
-    .cursor-dot,.cursor-ring{position:fixed;left:0;top:0;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:80}
-    .cursor-dot{width:8px;height:8px;background:var(--ac);transition:.2s}
-    .cursor-ring{width:32px;height:32px;border:1px solid var(--ac);opacity:.4;transition:.25s}
-    .cursor-ring.a{transform:translate(-50%,-50%) scale(2)} .cursor-dot.h{transform:translate(-50%,-50%) scale(0)}
-    @media(max-width:900px){html,body{cursor:auto}.cursor-dot,.cursor-ring,#bg{display:none}.fallback{opacity:1}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    :root{--bg:#0a0a0a;--ac:#c8ff00;--tx:#fff;--m:#888;--d:#555;--l:#1a1a1a}*{box-sizing:border-box;margin:0;padding:0}
+    html,body{background:var(--bg);color:var(--tx);font-family:"Space Grotesk",sans-serif;cursor:none}body{opacity:0;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}.wrap{width:min(1200px,92vw);margin:auto}#bg{position:fixed;inset:0;z-index:-3}.mesh{position:fixed;inset:0;z-index:-2;opacity:0;background:radial-gradient(circle at 20% 18%,rgba(200,255,0,.04),transparent 36%),radial-gradient(circle at 76% 72%,rgba(200,255,0,.04),transparent 40%)}
+    .nav{position:fixed;inset:0 0 auto 0;z-index:40;padding:.9rem 4vw;display:flex;justify-content:space-between;align-items:center;transition:.2s}.nav.scrolled{background:#0a0a0a;border-bottom:1px solid #1a1a1a}
+    .logo{font-family:"Barlow Condensed",sans-serif;font-size:18px}.links{display:flex;gap:1.1rem}.links a{font-size:13px;color:#888;font-weight:500;transition:.2s}.links a:hover{color:var(--ac)}
+    .burger{display:none;gap:4px;flex-direction:column}.burger span{width:20px;height:2px;background:var(--ac)}.mob{position:fixed;inset:0;background:#0a0a0a;z-index:45;display:grid;place-content:center;gap:1rem;transform:translateY(-100%);transition:.3s}.mob.open{transform:none}.mob a{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.4rem,12vw,4rem)}
+    section{padding:110px 0;border-top:1px solid var(--l)}.hero{min-height:100vh;border-top:0;display:grid;place-items:center;text-align:center}
+    .h1,.h2{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,18vw,18rem);line-height:.82;letter-spacing:-.02em}.h2{color:transparent;-webkit-text-stroke:1px var(--ac)}
+    .sub{margin-top:1rem;color:var(--m);font-size:14px}.btn{display:inline-block;margin-top:1.2rem;border:1px solid var(--ac);color:var(--ac);padding:.75rem 1.05rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;transition:.3s}.btn:hover{background:var(--ac);color:var(--bg)}
+    .label{font-size:11px;color:var(--ac);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.6rem}.hd{font-family:"Barlow Condensed",sans-serif;font-size:clamp(2.6rem,8vw,5rem);line-height:.92;margin-bottom:.9rem}.body{max-width:680px;color:#888;font-size:17px;line-height:2;white-space:pre-line}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-top:1.2rem}.stat{background:#101010;border:1px solid var(--l);padding:.65rem}.num{font-family:"Barlow Condensed",sans-serif;color:var(--ac);font-size:clamp(3rem,8vw,6rem);line-height:.85}.cap{font-size:12px;color:var(--d);text-transform:uppercase;letter-spacing:.08em}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}.card{position:relative;background:#111;border:1px solid #1e1e1e;aspect-ratio:4/3;padding:.9rem;overflow:hidden}.card:hover{border-color:var(--ac)}.card h3{font-family:"Barlow Condensed",sans-serif;font-size:2rem;position:relative;z-index:2}.tag{position:relative;z-index:2;display:inline-block;margin-top:.45rem;border:1px solid var(--ac);color:var(--ac);font-size:11px;border-radius:999px;padding:.28rem .58rem}
+    .ov{position:absolute;inset:0;display:grid;place-items:center;background:rgba(10,10,10,.72);color:var(--ac);font-family:"Barlow Condensed",sans-serif;font-size:2rem;opacity:0;transition:.3s}.card:hover .ov{opacity:1}
+    .cciif .ov{font-family:"Space Grotesk",sans-serif;font-size:13px;line-height:1.6;text-align:left;padding:1rem;color:#a8a8a8}
+    .lab{border-color:var(--ac)}.contact{min-height:100vh;display:grid;place-items:center;text-align:center}.contact .hd{font-size:clamp(3rem,10vw,10rem)}.meta{margin-top:1rem;color:#444;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    .filled{background:var(--ac);color:#0a0a0a}
+    .cursor-dot,.cursor-ring{position:fixed;left:0;top:0;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:99}.cursor-dot{width:8px;height:8px;background:var(--ac)}.cursor-ring{width:32px;height:32px;border:1px solid var(--ac);opacity:.4}.cursor-ring.a{transform:translate(-50%,-50%) scale(2)}.cursor-dot.h{transform:translate(-50%,-50%) scale(0)}
+    @media(max-width:1024px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:900px){html,body{cursor:auto}.links,.cursor-dot,.cursor-ring,#bg{display:none}.mesh{opacity:1}.burger{display:flex}.stats,.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <div class="fallback"></div>
-  <canvas id="bg"></canvas>
+  <div class="mesh"></div><canvas id="bg"></canvas>
+  <header class="nav" id="nav"><a class="logo" href="/index.html">ARCANE</a><nav class="links"><a href="/index.html">Home</a><a href="/index.html#work">Work</a><a href="/lab.html">Lab</a><a href="/index.html#contact">Contact</a></nav><button id="burger" class="burger" aria-label="menu"><span></span><span></span><span></span></button></header>
+  <nav class="mob" id="mob"><a href="/index.html">Home</a><a href="/index.html#work">Work</a><a href="/lab.html">Lab</a><a href="/index.html#contact">Contact</a></nav>
   <main class="wrap">
-    <section class="hero" id="top">
-      <div>
-        <h1 id="ha">ARCANE</h1>
-        <h2 id="hb">STUDIO</h2>
-        <p>AI-powered web studio — Tel Aviv</p>
-        <a class="cta hoverable" href="https://calendly.com/hello-beyitworld/30-minutes-meeting" target="_blank" rel="noopener noreferrer">Start a project →</a>
-      </div>
+    <section class="hero" id="hero"><div><h1 class="h1" id="a">ARCANE</h1><h2 class="h2" id="b">STUDIO</h2><p class="sub">AI-powered web studio — Tel Aviv</p><a class="btn" href="#contact">Start a project →</a></div></section>
+    <section id="manifesto"><h2 class="hd">We don't decorate the web. We engineer it.</h2><p class="body">Arcane Studio is a one-person AI-powered web development
+studio based in Tel Aviv. We operate two web agency brands
+— Mizra in Israel, Lancio in France — and build internal
+tools, automation pipelines, and custom platforms for
+clients who need things done fast and right.
+
+Every project starts with a real problem and ends with
+working software. No templates. No bloat. No subcontractors
+hiding behind a Figma file. Just direct, precise builds
+that ship.
+
+We use AI at every layer — to write code faster, to
+automate lead generation, to analyze documents, to send
+emails, to scrape data. Not as a gimmick. As infrastructure.
+
+We've built e-commerce platforms, newsletter studios,
+web agency back-offices, WhatsApp outreach pipelines,
+SEO crawlers, and SaaS tools — often in under a week.
+The Lab is where we push further: 30 mini-projects in
+30 days, each one live, each one solving a real problem.</p>
+      <div class="stats"><article class="stat"><div class="num" data-t="2">0</div><div class="cap">Agency brands</div></article><article class="stat"><div class="num" data-t="4">0</div><div class="cap">Countries reached</div></article><article class="stat"><div class="num" data-t="9595">0</div><div class="cap">Leads in pipeline</div></article><article class="stat"><div class="num" data-t="30">0</div><div class="cap">Lab projects</div></article></div>
     </section>
-
-    <section class="section manifesto" id="manifesto">
-      <h3>We don't decorate the web. We engineer it.</h3>
-      <p class="body">Arcane Studio is a one-person AI-powered web development studio
-based in Tel Aviv. We operate two web agency brands — Mizra in
-Israel, Lancio in France — and build internal tools, automation
-pipelines, and custom platforms for clients who need things done
-fast and right.
-
-Every project starts with a real problem and ends with working
-software. No templates. No bloat. No subcontractors hiding behind
-a Figma file. Just direct, precise builds that ship.
-
-We use AI at every layer — to write code faster, to automate
-lead generation, to analyze documents, to send emails, to
-scrape data. Not as a gimmick. As infrastructure.
-
-We've built e-commerce platforms, newsletter studios, web agency
-back-offices, WhatsApp outreach pipelines, SEO crawlers, and
-SaaS tools — often in under a week. The Lab is where we push
-further: 30 mini-projects in 30 days, each one live, each one
-solving a real problem.</p>
-      <div class="stats">
-        <article class="stat"><div class="num" data-t="2">0</div><div class="lbl">Agency brands</div></article>
-        <article class="stat"><div class="num" data-t="4">0</div><div class="lbl">Countries reached</div></article>
-        <article class="stat"><div class="num" data-t="9595">0</div><div class="lbl">Leads in pipeline</div></article>
-        <article class="stat"><div class="num" data-t="30">0</div><div class="lbl">Lab projects</div></article>
-      </div>
-    </section>
-
-    <section class="section" id="work">
-      <h2 class="title">SELECTED WORK</h2>
-      <div class="grid">
-        <a class="card hoverable" href="/mizra.html"><h4>Mizra</h4><span class="tag">Web Agency · Israel</span></a>
-        <a class="card hoverable" href="/lancio.html"><h4>Lancio</h4><span class="tag">Web Agency · France</span></a>
-        <a class="card hoverable" href="/ryvdoll.html"><h4>Ryvdoll</h4><span class="tag">Newsletter Studio · Fashion</span></a>
-        <a class="card hoverable" href="/binational.html"><h4>Bi-National Chambers</h4><span class="tag">Platform Architecture · Israel</span></a>
-        <article class="card"><h4>CCIIF</h4><span class="tag">Institutional Web · France-Israel</span><p>Full site build for the Israel-France Chamber of Commerce. New platform in development — on hold pending geopolitical context.</p></article>
-        <a class="card hoverable" href="/lab.html"><h4>Lab</h4><span class="tag">30 Projects · 30 Days</span></a>
-      </div>
-    </section>
+    <section id="work"><p class="label">Selected Work</p><div class="grid">
+      <a class="card" href="/mizra.html"><h3>Mizra</h3><span class="tag">Web Agency · Israel</span><div class="ov">View →</div></a>
+      <a class="card" href="/lancio.html"><h3>Lancio</h3><span class="tag">Web Agency · France</span><div class="ov">View →</div></a>
+      <a class="card" href="/ryvdoll.html"><h3>Ryvdoll</h3><span class="tag">Newsletter Studio · Fashion</span><div class="ov">View →</div></a>
+      <a class="card" href="/binational.html"><h3>Bi-National</h3><span class="tag">Platform Architecture · Israel</span><div class="ov">View →</div></a>
+      <article class="card cciif"><h3>CCIIF</h3><span class="tag">Institutional Web · France-Israel</span><div class="ov">Full site build for the Israel-France Chamber of Commerce. New platform in development — on hold pending geopolitical context.</div></article>
+      <a class="card lab" href="/lab.html"><h3>Lab</h3><span class="tag">30 Projects · 30 Days</span><div class="ov">Ongoing →</div></a>
+    </div></section>
+    <section id="contact" class="contact"><div><h2 class="hd">Let's build something real.</h2><a class="btn filled" href="https://calendly.com/hello-beyitworld/30-minutes-meeting" target="_blank" rel="noopener noreferrer">Book a call</a> <a class="btn" href="#work">See pricing →</a><p class="meta">getmizra.com (IL) · lancio.fr (FR)</p></div></section>
   </main>
   <div class="cursor-dot"></div><div class="cursor-ring"></div>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script>
   <script>
-    const mobile=matchMedia("(max-width:900px)").matches, hasGSAP=typeof gsap!=="undefined"&&typeof ScrollTrigger!=="undefined"; if(hasGSAP) gsap.registerPlugin(ScrollTrigger);
-    if(typeof Lenis!=="undefined"){const l=new Lenis({duration:1.2,lerp:.1,smoothWheel:true});requestAnimationFrame(function raf(t){l.raf(t);requestAnimationFrame(raf)});if(hasGSAP)l.on("scroll",ScrollTrigger.update)}
-    if(!mobile&&typeof THREE!=="undefined"){const c=document.getElementById("bg"),s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,100);cam.position.z=3;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(innerWidth,innerHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));const g=new THREE.BufferGeometry(),p=new Float32Array(2000*3);for(let i=0;i<2000;i++){const k=i*3;p[k]=(Math.random()-.5)*8;p[k+1]=(Math.random()-.5)*8;p[k+2]=(Math.random()-.5)*8}g.setAttribute("position",new THREE.BufferAttribute(p,3));const m=new THREE.PointsMaterial({color:0xc8ff00,size:.013,opacity:.06,transparent:true,depthWrite:false});const pts=new THREE.Points(g,m);s.add(pts);let boost=0;if(hasGSAP){ScrollTrigger.create({trigger:"#top",start:"top top",end:"bottom top",scrub:true,onUpdate:self=>boost=Math.min(Math.abs(self.getVelocity())*.000003,0.05)});gsap.to("#ha",{x:-180,opacity:0,ease:"none",scrollTrigger:{trigger:"#top",start:"top top",end:"bottom top",scrub:true}});gsap.to("#hb",{x:180,opacity:0,ease:"none",scrollTrigger:{trigger:"#top",start:"top top",end:"bottom top",scrub:true}})}(function a(){pts.rotation.y+=.0006+boost;const arr=pts.geometry.attributes.position.array;for(let i=0;i<arr.length;i+=3){arr[i]*=.9996;arr[i+1]*=.9996;arr[i+2]*=.9996;if(Math.abs(arr[i])+Math.abs(arr[i+1])+Math.abs(arr[i+2])<.03){arr[i]=(Math.random()-.5)*8;arr[i+1]=(Math.random()-.5)*8;arr[i+2]=(Math.random()-.5)*8}}pts.geometry.attributes.position.needsUpdate=true;r.render(s,cam);requestAnimationFrame(a)})();addEventListener("resize",()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)})}
-    if(hasGSAP){gsap.to("body",{opacity:1,duration:.6});document.querySelectorAll(".num").forEach(n=>{const t=Number(n.dataset.t||0);gsap.fromTo(n,{innerText:0},{innerText:t,duration:1.1,snap:{innerText:1},onUpdate:function(){n.textContent=Math.round(this.targets()[0].innerText).toLocaleString()},scrollTrigger:{trigger:n,start:"top 85%",once:true}})});gsap.from(".card",{y:28,opacity:0,stagger:.08,duration:.6,scrollTrigger:{trigger:"#work",start:"top 80%"}})} else document.body.style.opacity=1;
-    if(!mobile&&!matchMedia("(pointer:coarse)").matches){const d=document.querySelector(".cursor-dot"),r=document.querySelector(".cursor-ring"),c={x:innerWidth/2,y:innerHeight/2},rp={x:c.x,y:c.y};addEventListener("mousemove",e=>{c.x=e.clientX;c.y=e.clientY;d.style.left=c.x+"px";d.style.top=c.y+"px"});(function f(){rp.x+=(c.x-rp.x)*.12;rp.y+=(c.y-rp.y)*.12;r.style.left=rp.x+"px";r.style.top=rp.y+"px";requestAnimationFrame(f)})();document.querySelectorAll(".hoverable,a,button").forEach(el=>{el.onmouseenter=()=>{r.classList.add("a");d.classList.add("h")};el.onmouseleave=()=>{r.classList.remove("a");d.classList.remove("h")}})}
+    const m=matchMedia("(max-width:900px)").matches,g=window.gsap&&window.ScrollTrigger;if(g)gsap.registerPlugin(ScrollTrigger);if(window.Lenis){const l=new Lenis({duration:1.2,lerp:.1,smoothWheel:true});requestAnimationFrame(function r(t){l.raf(t);requestAnimationFrame(r)});if(g)l.on("scroll",ScrollTrigger.update)}
+    const nav=document.getElementById("nav");if(g){ScrollTrigger.create({start:20,onUpdate:s=>nav.classList.toggle("scrolled",s.scroll()>20)});gsap.to("#a",{x:-180,opacity:0,ease:"none",scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:true}});gsap.to("#b",{x:180,opacity:0,ease:"none",scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:true}});gsap.from(".card",{y:28,opacity:0,stagger:.08,scrollTrigger:{trigger:"#work",start:"top 82%"}});document.querySelectorAll(".num").forEach(n=>{const t=+n.dataset.t;gsap.fromTo(n,{innerText:0},{innerText:t,duration:1.1,snap:{innerText:1},onUpdate:function(){n.textContent=Math.round(this.targets()[0].innerText).toLocaleString()},scrollTrigger:{trigger:n,start:"top 85%",once:true}})})}
+    if(!m&&window.THREE){const c=document.getElementById("bg"),s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,100);cam.position.z=3;const r=new THREE.WebGLRenderer({canvas:c,alpha:true});r.setSize(innerWidth,innerHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));const gg=new THREE.BufferGeometry(),pp=new Float32Array(2000*3);for(let i=0;i<2000;i++){const k=i*3;pp[k]=(Math.random()-.5)*8;pp[k+1]=(Math.random()-.5)*8;pp[k+2]=(Math.random()-.5)*8}gg.setAttribute("position",new THREE.BufferAttribute(pp,3));const pts=new THREE.Points(gg,new THREE.PointsMaterial({color:0xc8ff00,size:.013,opacity:.06,transparent:true,depthWrite:false}));s.add(pts);(function a(){pts.rotation.y+=.0006;r.render(s,cam);requestAnimationFrame(a)})();addEventListener("resize",()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)})}
+    const burger=document.getElementById("burger"),mob=document.getElementById("mob");burger.onclick=()=>{mob.classList.toggle("open");if(g&&mob.classList.contains("open"))gsap.from("#mob a",{opacity:0,y:16,stagger:.08,duration:.25})};mob.querySelectorAll("a").forEach(a=>a.onclick=()=>mob.classList.remove("open"));
+    document.body.style.opacity=1;
+    if(!m&&!matchMedia("(pointer:coarse)").matches){const d=document.querySelector(".cursor-dot"),r=document.querySelector(".cursor-ring"),c={x:innerWidth/2,y:innerHeight/2},p={x:c.x,y:c.y};addEventListener("mousemove",e=>{c.x=e.clientX;c.y=e.clientY;d.style.left=c.x+"px";d.style.top=c.y+"px"});(function f(){p.x+=(c.x-p.x)*.12;p.y+=(c.y-p.y)*.12;r.style.left=p.x+"px";r.style.top=p.y+"px";requestAnimationFrame(f)})();document.querySelectorAll("a,button,.card").forEach(el=>{el.onmouseenter=()=>{r.classList.add("a");d.classList.add("h")};el.onmouseleave=()=>{r.classList.remove("a");d.classList.remove("h")}})}
   </script>
 </body>
 </html>
