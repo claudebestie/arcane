@@ -613,17 +613,17 @@
     <section class="work" id="work">
       <h2 class="section-title">SELECTED WORK</h2>
       <div class="work-grid">
-        <article class="work-card">
+        <article class="work-card hoverable" data-link="https://getmizra.com">
           <h3 class="work-name">Mizra</h3>
           <span class="tag">Web Agency &#183; Israel</span>
           <div class="work-overlay">View &#8594;</div>
         </article>
-        <article class="work-card">
+        <article class="work-card hoverable" data-link="https://lancio.fr">
           <h3 class="work-name">Lancio</h3>
           <span class="tag">Web Agency &#183; France</span>
           <div class="work-overlay">View &#8594;</div>
         </article>
-        <article class="work-card">
+        <article class="work-card hoverable" data-link="#contact">
           <h3 class="work-name">Ryvdoll</h3>
           <span class="tag">E-commerce &#183; Fashion</span>
           <div class="work-overlay">View &#8594;</div>
@@ -965,6 +965,52 @@
       });
     }
 
+    function setupLinks() {
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", (e) => {
+          const href = anchor.getAttribute("href");
+          if (!href || href === "#") return;
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          if (lenis) {
+            lenis.scrollTo(target, { duration: 1.2 });
+          } else {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      document.querySelectorAll(".work-card[data-link]").forEach((card) => {
+        const go = () => {
+          const link = card.getAttribute("data-link");
+          if (!link) return;
+          if (link.startsWith("#")) {
+            const target = document.querySelector(link);
+            if (!target) return;
+            if (lenis) {
+              lenis.scrollTo(target, { duration: 1.2 });
+            } else {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+            return;
+          }
+          window.open(link, "_blank", "noopener,noreferrer");
+        };
+
+        card.style.cursor = "pointer";
+        card.addEventListener("click", go);
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            go();
+          }
+        });
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("role", "link");
+      });
+    }
+
     function playIntro() {
       const loader = document.getElementById("loader");
       const loaderText = document.getElementById("loaderText");
@@ -1014,6 +1060,7 @@
     }
 
     setupMobileMenu();
+    setupLinks();
     setupCursor();
     setupAnimations();
     playIntro();
