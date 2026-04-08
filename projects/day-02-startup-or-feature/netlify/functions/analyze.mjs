@@ -35,7 +35,7 @@ Be honest and specific. If the idea is a feature, say of WHICH product. If it's 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': process.env.ARCANE_KEY,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
@@ -79,4 +79,4 @@ Be honest and specific. If the idea is a feature, say of WHICH product. If it's 
   }
 };
 
-export const config = { path: '/api/analyze' };
+// Route via netlify.toml redirect, not Edge Function config

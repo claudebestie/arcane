@@ -59,7 +59,7 @@ Detect at least 5-15 technologies if possible. Be specific (e.g. "Next.js 14" no
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': process.env.ARCANE_KEY,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
@@ -97,4 +97,4 @@ Detect at least 5-15 technologies if possible. Be specific (e.g. "Next.js 14" no
   }
 };
 
-export const config = { path: '/api/detect' };
+// Using Netlify Functions V2 (not Edge). Route via netlify.toml redirect.
