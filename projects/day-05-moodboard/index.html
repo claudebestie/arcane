@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodboard Generator — AI Creative Direction | Arcane Studio</title>
+  <meta name="description" content="Describe your project. Get an AI-generated moodboard with images, colors, typography, and creative direction.">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#f5f3ef;--card:#fff;--border:#e0dbd4;--text:#1a1815;--muted:#8a8078;--warm:#c4956a;--warm2:#a87b5a;--font:'Inter',sans-serif;--serif:'Playfair Display',serif}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;-webkit-font-smoothing:antialiased}
+    ::selection{background:var(--warm);color:#fff}
+    .container{max-width:900px;margin:0 auto;padding:0 24px}
+
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 0}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff;border:1px solid var(--border);border-radius:100px;font-size:12px;font-weight:500;color:var(--muted);width:fit-content;margin-bottom:32px}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:#16a34a}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.5rem,7vw,4.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.08;margin-bottom:20px;color:var(--text)}
+    .hero h1 em{font-style:italic;color:var(--warm)}
+    .hero p{font-size:16px;color:var(--muted);max-width:480px;margin-bottom:40px;line-height:1.7}
+    textarea{width:100%;max-width:600px;min-height:100px;padding:18px 20px;border:2px solid var(--border);border-radius:14px;font-family:var(--font);font-size:15px;outline:none;background:#fff;resize:vertical;line-height:1.6;color:var(--text);transition:border-color .2s}
+    textarea:focus{border-color:var(--warm);box-shadow:0 0 0 4px rgba(196,149,106,.08)}
+    textarea::placeholder{color:#c0b8ae}
+    .btn{padding:16px 32px;border:none;border-radius:14px;cursor:pointer;font-family:var(--font);font-size:15px;font-weight:600;transition:transform .15s}
+    .btn:active{transform:scale(.97)}
+    .btn-warm{background:var(--warm);color:#fff;margin-top:12px;width:100%;max-width:600px;box-shadow:0 4px 16px rgba(196,149,106,.25)}
+    .btn-outline{background:#fff;color:var(--text);border:1px solid var(--border);font-size:13px;padding:12px 20px;border-radius:10px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .chip{padding:8px 14px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--muted);cursor:pointer;background:#fff;transition:all .2s}
+    .chip:hover{border-color:var(--warm);color:var(--warm)}
+
+    .loading{padding:160px 0;text-align:center}
+    .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--warm);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 20px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+    /* Moodboard grid */
+    .board-title{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;margin-bottom:6px}
+    .board-vibe{font-size:14px;color:var(--muted);margin-bottom:28px;font-style:italic}
+    .img-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,200px);gap:8px;margin-bottom:28px;border-radius:16px;overflow:hidden}
+    .img-grid .img-cell{overflow:hidden;position:relative}
+    .img-grid .img-cell:first-child{grid-column:span 2;grid-row:span 2}
+    .img-grid img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+    .img-grid .img-cell:hover img{transform:scale(1.04)}
+    .img-credit{position:absolute;bottom:6px;left:8px;font-size:9px;color:rgba(255,255,255,.6);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px}
+
+    /* Color palette */
+    .palette-row{display:flex;gap:6px;margin-bottom:28px;height:56px;border-radius:12px;overflow:hidden}
+    .palette-swatch{flex:1;cursor:pointer;position:relative;transition:flex .2s}
+    .palette-swatch:hover{flex:1.5}
+    .palette-label{position:absolute;bottom:4px;left:6px;font-size:9px;color:rgba(255,255,255,.7);font-weight:500;opacity:0;transition:opacity .2s}
+    .palette-swatch:hover .palette-label{opacity:1}
+
+    /* Sections */
+    .sections{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+    .section-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px}
+    .section-label{font-family:var(--serif);font-size:14px;font-weight:600;margin-bottom:4px}
+    .section-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+    .notes-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:28px}
+    .notes-card p{font-size:14px;line-height:1.8;color:#44403c}
+
+    .typo-card{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:28px}
+    .typo-card .typo-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+    .typo-card .typo-value{font-size:16px;font-weight:600}
+
+    .cta-section{text-align:center;padding:80px 0;border-top:1px solid var(--border);margin-top:32px}
+    .cta-section h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;margin-bottom:8px}
+    .cta-section h2 em{font-style:italic;color:var(--warm)}
+    .cta-section p{font-size:14px;color:var(--muted);margin-bottom:24px}
+    .btn-cta{display:inline-flex;padding:14px 28px;background:var(--text);color:#fff;border:none;border-radius:10px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none}
+    .footer{padding:24px 0;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .footer a{font-size:12px;color:var(--muted);text-decoration:none}.footer a:hover{color:var(--warm)}
+    .footer span{font-size:12px;color:var(--border)}
+    .fade{opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s cubic-bezier(.16,1,.3,1)}.fade.in{opacity:1;transform:none}
+    @media(max-width:600px){.img-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,150px)}.sections{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <section id="hero" class="hero">
+    <div class="badge fade"><span class="badge-dot"></span> Day 5/30 — Arcane Studio</div>
+    <h1 class="fade">Generate a <em>moodboard</em> in seconds.</h1>
+    <p class="fade">Describe your project. AI picks the images, colors, typography, and creative direction — ready to share with your team.</p>
+    <div class="fade">
+      <textarea id="promptInput" placeholder="A luxury candle brand inspired by Japanese minimalism and warm earth tones..."></textarea>
+      <button class="btn btn-warm" id="generateBtn">Generate moodboard →</button>
+    </div>
+    <div class="chips fade">
+      <span class="chip" onclick="tryPrompt(0)">SaaS dashboard</span>
+      <span class="chip" onclick="tryPrompt(1)">Coffee shop brand</span>
+      <span class="chip" onclick="tryPrompt(2)">Fashion editorial</span>
+      <span class="chip" onclick="tryPrompt(3)">Tech startup</span>
+    </div>
+  </section>
+
+  <section id="loading" class="loading" style="display:none">
+    <div class="spinner"></div>
+    <div class="label" id="loadingStep">Generating creative direction...</div>
+  </section>
+
+  <section id="results" style="display:none;padding:40px 0 0">
+    <div class="fade"><div class="board-title" id="boardTitle"></div><div class="board-vibe" id="boardVibe"></div></div>
+    <div id="imgGrid" class="img-grid fade"></div>
+    <div class="fade"><div class="label" style="margin-bottom:8px">Color palette</div></div>
+    <div id="paletteRow" class="palette-row fade"></div>
+    <div class="typo-card fade"><div><div class="typo-label">Typography</div><div class="typo-value" id="typoValue"></div></div></div>
+    <div class="fade"><div class="label" style="margin-bottom:10px">Direction</div></div>
+    <div id="sections" class="sections fade"></div>
+    <div class="notes-card fade"><div class="label" style="margin-bottom:8px">Creative notes</div><p id="styleNotes"></p></div>
+    <div class="cta-section fade">
+      <div class="label" style="margin-bottom:12px">Love this direction?</div>
+      <h2>We turn moodboards into <em>real brands.</em></h2>
+      <p>From concept to launch. Arcane Studio brings your vision to life.</p>
+      <a href="https://arcane-studio.com/#contact" class="btn-cta" target="_blank">Start a project ↗</a>
+    </div>
+    <div style="text-align:center;padding:24px 0"><button class="btn btn-outline" onclick="reset()">Generate another →</button></div>
+  </section>
+  <footer class="footer"><a href="https://arcane-studio.com" target="_blank">⚡ Arcane Studio</a><span>Day 5/30</span></footer>
+</div>
+<script>
+  setTimeout(()=>document.querySelectorAll('.fade').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60)),100);
+  const promptInput=document.getElementById('promptInput'),generateBtn=document.getElementById('generateBtn');
+  const hero=document.getElementById('hero'),loading=document.getElementById('loading'),results=document.getElementById('results');
+  const EXAMPLES=['A modern SaaS analytics dashboard — dark mode, data-heavy, minimal, professional','A cozy artisan coffee shop in Brooklyn — warm, handmade, earthy, welcoming','A high-fashion editorial magazine — bold, monochrome, sharp typography, editorial','A B2B tech startup building developer tools — clean, technical, trustworthy, modern'];
+  window.tryPrompt=(i)=>{promptInput.value=EXAMPLES[i];generateBtn.click()};
+  window.reset=()=>{results.style.display='none';hero.style.display='flex';promptInput.value='';window.scrollTo({top:0,behavior:'smooth'})};
+  const steps=['Generating creative direction...','Searching for images...','Building color palette...','Composing moodboard...'];
+  generateBtn.addEventListener('click',async()=>{
+    const prompt=promptInput.value.trim();
+    if(!prompt||prompt.length<5){promptInput.style.borderColor='var(--warm)';setTimeout(()=>promptInput.style.borderColor='',2000);return}
+    hero.style.display='none';results.style.display='none';loading.style.display='block';
+    let step=0;const iv=setInterval(()=>{step=Math.min(step+1,steps.length-1);document.getElementById('loadingStep').textContent=steps[step]},2000);
+    try{
+      const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+      clearInterval(iv);if(!res.ok)throw new Error('Failed');
+      const data=await res.json();if(data.error)throw new Error(data.error);
+      loading.style.display='none';results.style.display='block';render(data);
+      results.querySelectorAll('.fade').forEach((el,i)=>{el.classList.remove('in');setTimeout(()=>el.classList.add('in'),i*80)});
+    }catch(e){clearInterval(iv);document.getElementById('loadingStep').textContent='Error: '+e.message;setTimeout(()=>{loading.style.display='none';hero.style.display='flex'},2500)}
+  });
+  function render(d){
+    document.getElementById('boardTitle').textContent=d.title||'Moodboard';
+    document.getElementById('boardVibe').textContent=d.vibe||'';
+    // Images
+    const imgs=d.images||[];
+    document.getElementById('imgGrid').innerHTML=imgs.slice(0,5).map((img,i)=>
+      `<div class="img-cell"><img src="${img.url}" alt="${img.keyword}" loading="lazy"><div class="img-credit">${img.credit}</div></div>`
+    ).join('')+(!imgs.length?'<div style="grid-column:span 4;padding:40px;text-align:center;color:var(--muted)">No images found</div>':'');
+    // Palette
+    const colors=d.color_palette||[];const names=d.color_names||[];
+    document.getElementById('paletteRow').innerHTML=colors.map((c,i)=>
+      `<div class="palette-swatch" style="background:${c}" onclick="navigator.clipboard.writeText('${c}')"><div class="palette-label">${names[i]||c}</div></div>`
+    ).join('');
+    // Typography
+    document.getElementById('typoValue').textContent=d.typography_suggestion||'';
+    // Sections
+    document.getElementById('sections').innerHTML=(d.sections||[]).map(s=>
+      `<div class="section-card"><div class="section-label">${s.label}</div><div class="section-desc">${s.description}</div></div>`
+    ).join('');
+    document.getElementById('styleNotes').textContent=d.style_notes||'';
+  }
+  window.loadDemo=(p)=>{promptInput.value=p||EXAMPLES[0];generateBtn.click()};
+  promptInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.metaKey)generateBtn.click()});
+</script>
+</body>
+</html>
