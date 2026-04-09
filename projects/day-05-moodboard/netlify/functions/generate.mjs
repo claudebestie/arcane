@@ -41,14 +41,15 @@ Make the keywords specific and visual — good for Unsplash image search. Think 
       if (m) board = JSON.parse(m[0]); else throw new Error('Parse error');
     }
 
-    // Generate images with Pollinations AI (free, no API key)
+    // Fetch real photos from loremflickr (Flickr images by keyword, no API key)
     const images = [];
-    for (const kw of (board.keywords || []).slice(0, 5)) {
-      const prompt = encodeURIComponent(`${kw}, professional photography, moodboard style, high quality, 4k`);
+    for (let i = 0; i < Math.min((board.keywords || []).length, 5); i++) {
+      const kw = board.keywords[i];
+      const tags = kw.replace(/\s+/g, ',');
       images.push({
-        url: `https://image.pollinations.ai/prompt/${prompt}?width=800&height=600&nologo=true&seed=${Date.now() + images.length}`,
-        thumb: `https://image.pollinations.ai/prompt/${prompt}?width=400&height=300&nologo=true&seed=${Date.now() + images.length}`,
-        credit: 'AI Generated',
+        url: `https://loremflickr.com/800/600/${encodeURIComponent(tags)}?lock=${i + Date.now() % 1000}`,
+        thumb: `https://loremflickr.com/400/300/${encodeURIComponent(tags)}?lock=${i + Date.now() % 1000}`,
+        credit: 'Flickr',
         keyword: kw
       });
     }
