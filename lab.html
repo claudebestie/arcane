@@ -63,7 +63,34 @@ CDN, payment provider, marketing stack
 3. Cost estimate — monthly running cost based
 on detected stack</div><div><div class="stack"><span class="pill">Custom scraper</span><span class="pill">Anthropic API</span><span class="pill">Netlify</span></div><p class="result">Most technically complex Lab tool. Used internally to audit client stacks before proposing rebuilds.</p></div></div></section>
 
-<section class="more"><p class="lb">More Coming</p><h2 class="mh">Projects 04–30 dropping daily.</h2><p class="mb">One tool per day. Follow on LinkedIn for daily updates.</p><a class="btn" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">Follow on LinkedIn →</a></section>
+<section class="project alt"><div class="wrap"><p class="day">Day 04 / 30</p><h2 class="h">Palette Extractor</h2><a class="url" href="https://palette.arcane-studio.com" target="_blank" rel="noopener noreferrer">palette.arcane-studio.com</a><span class="tag">Design Tool · Colors · CSS</span><video src="./videos/palette-final.mp4" autoplay loop muted playsinline></video><div class="cols"><div class="txt"><strong>Problem</strong>
+Designers see a site they love and spend 30 minutes
+eyedropping colors one by one. Palette Extractor
+does it in 2 seconds — every color on the site,
+named, categorized by role, with CSS code ready
+to copy-paste.
+
+<strong>How it works</strong>
+1. Paste any URL — we fetch the full HTML + CSS
+2. AI extracts and names every color (not just
+"blue" — "Stripe Electric Blue")
+3. Categories — primary, accent, background, text
+4. CSS code — ready to paste into your project</div><div><div class="stack"><span class="pill">Claude Haiku</span><span class="pill">CSS Parser</span><span class="pill">Netlify</span></div><p class="result">Used by designers at Arcane before every brand project. Fastest tool in the Lab — 1.6s average.</p></div></div></div></section>
+
+<section class="project"><p class="day">Day 05 / 30</p><h2 class="h">Moodboard Generator</h2><a class="url" href="https://moodboard.arcane-studio.com" target="_blank" rel="noopener noreferrer">moodboard.arcane-studio.com</a><span class="tag">Creative Tool · AI · Branding</span><video src="./videos/moodboard-final.mp4" autoplay loop muted playsinline></video><div class="cols"><div class="txt"><strong>Problem</strong>
+Building a moodboard used to take a full day —
+searching Pinterest, collecting screenshots,
+organizing colors and fonts. This tool generates
+a complete creative direction from a sentence.
+
+<strong>How it works</strong>
+1. Describe your project in a few words
+2. AI generates the creative direction — mood,
+textures, typography, layout approach
+3. AI-generated images that match your vision
+4. 5-color palette with named colors + font pairing</div><div><div class="stack"><span class="pill">Claude Sonnet</span><span class="pill">Pollinations AI</span><span class="pill">Netlify</span></div><p class="result">The first tool we use at Arcane when starting a new brand. Now free for everyone.</p></div></div></section>
+
+<section class="more"><p class="lb">More Coming</p><h2 class="mh">Projects 06–30 dropping daily.</h2><p class="mb">One tool per day. Follow on LinkedIn for daily updates.</p><a class="btn" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">Follow on LinkedIn →</a></section>
 <section class="next"><div><p style="color:#555;font-size:14px">Next project</p><h3>Home</h3><a class="btn" href="/index.html">Back to index →</a></div></section></main><div class="cursor-dot"></div><div class="cursor-ring"></div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script><script>
 const m=matchMedia("(max-width:900px)").matches,g=window.gsap&&window.ScrollTrigger;if(g)gsap.registerPlugin(ScrollTrigger);if(window.Lenis){const l=new Lenis({duration:1.2,lerp:.1,smoothWheel:true});requestAnimationFrame(function r(t){l.raf(t);requestAnimationFrame(r)});if(g)l.on("scroll",ScrollTrigger.update)}const nav=document.getElementById("nav");if(g){ScrollTrigger.create({start:20,onUpdate:s=>nav.classList.toggle("scrolled",s.scroll()>20)});gsap.from("section",{y:25,opacity:0,stagger:.07,scrollTrigger:{trigger:"main",start:"top 85%"}})}
