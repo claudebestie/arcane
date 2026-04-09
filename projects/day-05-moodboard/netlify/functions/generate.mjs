@@ -41,25 +41,16 @@ Make the keywords specific and visual — good for Unsplash image search. Think 
       if (m) board = JSON.parse(m[0]); else throw new Error('Parse error');
     }
 
-    // Fetch images from Unsplash (using their free API)
+    // Generate images with Pollinations AI (free, no API key)
     const images = [];
-    for (const kw of (board.keywords || []).slice(0, 8)) {
-      try {
-        const imgRes = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(kw)}&per_page=1&orientation=landscape`, {
-          headers: { 'Authorization': 'Client-ID IYkzqXMfH4bnVEYmNBOVKGy0M0xv0hMKLLiSAncfuXA' }
-        });
-        if (imgRes.ok) {
-          const imgData = await imgRes.json();
-          if (imgData.results?.[0]) {
-            images.push({
-              url: imgData.results[0].urls.regular,
-              thumb: imgData.results[0].urls.small,
-              credit: imgData.results[0].user.name,
-              keyword: kw
-            });
-          }
-        }
-      } catch {}
+    for (const kw of (board.keywords || []).slice(0, 5)) {
+      const prompt = encodeURIComponent(`${kw}, professional photography, moodboard style, high quality, 4k`);
+      images.push({
+        url: `https://image.pollinations.ai/prompt/${prompt}?width=800&height=600&nologo=true&seed=${Date.now() + images.length}`,
+        thumb: `https://image.pollinations.ai/prompt/${prompt}?width=400&height=300&nologo=true&seed=${Date.now() + images.length}`,
+        credit: 'AI Generated',
+        keyword: kw
+      });
     }
     board.images = images;
 
